@@ -18,9 +18,9 @@ export default function init() {
 
     createAxis();
 
-    addFunc();
     initPlane();
     initBall();
+    addFunc();    
     createEvents();
 
     renderer.render(scene, camera);
@@ -38,6 +38,47 @@ function addFunc() {
         let z = this.position.z * Math.cos(delta) + this.position.x * Math.sin(delta);
         camera.position.set(x, this.position.y, z);
         camera.lookAt(new THREE.Vector3(0, 0, 0));
+    }
+
+    ball.v = new THREE.Vector3(0, 0, 0);
+    ball.move = function(v, dir) {
+        let dis = v * 0.16;
+
+        let theta = Math.atan(camera.position.x / camera.position.z);
+        let moveSin = dis * Math.sin(theta);
+        let moveCos = dis * Math.cos(theta);
+    
+        if(camera.position.cz < 0) {
+            moveSin = -moveSin;
+            moveCos = -moveCos;
+        }
+
+        let x= this.position.x;
+        let y= this.position.y;
+        let z= this.position.z;
+
+        switch(dir){
+            case 'up':
+                x = x - dis * moveSin;
+                z = z - dis * moveCos;
+                break;
+            case 'right': 
+                x = x + dis * moveCos;
+                z = z - dis * moveSin;
+                break;
+            case 'left': 
+                x = x - dis * moveCos;
+                z = z + dis * moveSin;
+                break;
+            case 'down': 
+                x = x + dis * moveSin;
+                z = z + dis * moveCos;
+                break;
+            default: 
+                break
+        }
+
+        this.position.set(x, y, z);
     }
 }
 
