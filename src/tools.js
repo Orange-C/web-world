@@ -1,13 +1,11 @@
-import db from './db.js'
-
 // ball move front
 export function move(x, y ,z, dir) {
     let dis = 0.3;
 
-    let theta = Math.atan(db.cx / db.cz);
+    let theta = Math.atan(camera.position.cx / camera.position.cz);
     let moveSin = dis * Math.sin(theta);
     let moveCos = dis * Math.cos(theta);
-    if(db.cz < 0) {
+    if(camera.position.cz < 0) {
         moveSin = -moveSin;
         moveCos = -moveCos;
     }
@@ -43,20 +41,5 @@ export function move(x, y ,z, dir) {
                 y,
                 z
             }
-    }
-}
-
-// camera rotateY  
-export function rotateY(x, y ,z, minus) {
-    let delta = Math.PI / 90;
-
-    if(minus) {
-        delta = -delta;
-    }
-
-    return {
-        x: x * Math.cos(delta) - z * Math.sin(delta),
-        y: y,
-        z: z * Math.cos(delta) + x * Math.sin(delta),
     }
 }

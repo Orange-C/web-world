@@ -1,10 +1,9 @@
-import db from './db'
-import createEvents from './events'
+import {createEvents} from './keyboard'
 
 export default function init() {
     // 初始化Renderer
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize(800, 600);
+    renderer.setSize(600, 450);
     document.getElementsByTagName('body')[0].appendChild(renderer.domElement);
     renderer.setClearColor(0xffffff);
 
@@ -13,16 +12,33 @@ export default function init() {
 
     // 初始化camera
     camera = new THREE.PerspectiveCamera(45, 4/3, 1, 1000);
-    camera.position.set(db.cx, db.cy, db.cz);
+    camera.position.set(12, 9, 15);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     scene.add(camera);
 
     createAxis();
+
+    addFunc();
     initPlane();
     initBall();
     createEvents();
 
     renderer.render(scene, camera);
+}
+
+function addFunc() {
+    camera.rotateY = function(rad, minus) {
+        let delta = rad;
+
+        if(minus) {
+            delta = -delta;
+        }
+
+        let x = this.position.x * Math.cos(delta) - this.position.z * Math.sin(delta);
+        let z = this.position.z * Math.cos(delta) + this.position.x * Math.sin(delta);
+        camera.position.set(x, this.position.y, z);
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+    }
 }
 
 function initBall() {
@@ -32,7 +48,7 @@ function initBall() {
             wireframe: true
         })
     );
-    ball.position.set(db.x, db.y, db.z);
+    ball.position.set(0, 0.5, 0);
     scene.add(ball);
 }
 
