@@ -1,45 +1,36 @@
-// ball move front
-export function move(x, y ,z, dir) {
-    let dis = 0.3;
+export function createAxis() {
+    let len = 100;
+    // 生成坐标系
+    var xGeometry = new THREE.Geometry();
+    xGeometry.vertices.push(
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(len, 0, 0)
+    );
 
-    let theta = Math.atan(camera.position.cx / camera.position.cz);
-    let moveSin = dis * Math.sin(theta);
-    let moveCos = dis * Math.cos(theta);
-    if(camera.position.cz < 0) {
-        moveSin = -moveSin;
-        moveCos = -moveCos;
-    }
+    var xAxis = new THREE.Line( xGeometry, new THREE.LineBasicMaterial({
+        color: 0xff0000
+    }) );
+    scene.add(xAxis);
 
-    switch(dir){
-        case 'up':
-            return {
-                x: x - dis * moveSin,
-                y: y,
-                z: z - dis * moveCos
-            }
-        case 'right': 
-            return {
-                x: x + dis * moveCos,
-                y: y,
-                z: z - dis * moveSin
-            }
-        case 'left': 
-            return {
-                x: x - dis * moveCos,
-                y: y,
-                z: z + dis * moveSin
-            }
-        case 'down': 
-            return {
-                x: x + dis * moveSin,
-                y: y,
-                z: z + dis * moveCos
-            }
-        default: 
-            return {
-                x,
-                y,
-                z
-            }
-    }
+    var yGeometry = new THREE.Geometry();
+    yGeometry.vertices.push(
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(0, len, 0)
+    );
+
+    var yAxis = new THREE.Line( yGeometry, new THREE.LineBasicMaterial({
+        color: 0x00ff00
+    }) );
+    scene.add(yAxis);
+
+    var zGeometry = new THREE.Geometry();
+    zGeometry.vertices.push(
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(0, 0, len)
+    );
+
+    var zAxis = new THREE.Line( zGeometry, new THREE.LineBasicMaterial({
+        color: 0x0000ff
+    }) );
+    scene.add(zAxis);
 }

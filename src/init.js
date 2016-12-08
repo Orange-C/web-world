@@ -1,18 +1,20 @@
-import {createEvents} from './keyboard'
+import {createEvents} from './keyboard';
+import config from './config';
+import {createAxis} from './tools'
 
 export default function init() {
     // 初始化Renderer
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(600, 450);
     document.getElementsByTagName('body')[0].appendChild(renderer.domElement);
-    renderer.setClearColor(0xffffff);
+    renderer.setClearColor(0x000000);
 
     // 初始化scene
     scene = new THREE.Scene();
 
     // 初始化camera
     camera = new THREE.PerspectiveCamera(45, 4/3, 1, 1000);
-    camera.position.set(12, 9, 15);
+    camera.position.set(36, 27, 45);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     scene.add(camera);
 
@@ -41,62 +43,23 @@ function addFunc() {
     }
 
     ball.v = new THREE.Vector3(0, 0, 0);
-    ball.move = function(v, dir) {
-        let dis = v * 0.16;
-
-        let theta = Math.atan(camera.position.x / camera.position.z);
-        let moveSin = dis * Math.sin(theta);
-        let moveCos = dis * Math.cos(theta);
-    
-        if(camera.position.cz < 0) {
-            moveSin = -moveSin;
-            moveCos = -moveCos;
-        }
-
-        let x= this.position.x;
-        let y= this.position.y;
-        let z= this.position.z;
-
-        switch(dir){
-            case 'up':
-                x = x - dis * moveSin;
-                z = z - dis * moveCos;
-                break;
-            case 'right': 
-                x = x + dis * moveCos;
-                z = z - dis * moveSin;
-                break;
-            case 'left': 
-                x = x - dis * moveCos;
-                z = z + dis * moveSin;
-                break;
-            case 'down': 
-                x = x + dis * moveSin;
-                z = z + dis * moveCos;
-                break;
-            default: 
-                break
-        }
-
-        this.position.set(x, y, z);
-    }
 }
 
 function initBall() {
-    ball = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 16),
+    ball = new THREE.Mesh(new THREE.SphereGeometry(config.R, 16, 16),
         new THREE.MeshBasicMaterial({
             color: 0x00cccc,
             wireframe: true
         })
     );
-    ball.position.set(0, 0.5, 0);
+    ball.position.set(0, config.R, 0);
     scene.add(ball);
 }
 
 function initPlane() {
-    var plane = new THREE.Mesh(new THREE.PlaneGeometry(16, 16, 16, 16),
+    var plane = new THREE.Mesh(new THREE.PlaneGeometry(64, 64, 16, 16),
         new THREE.MeshBasicMaterial({
-            color: 0x000000,
+            color: 0xffffff,
             wireframe: true
         })
     );
@@ -104,38 +67,3 @@ function initPlane() {
     scene.add(plane);
 }
 
-function createAxis() {
-    // 生成坐标系
-    var xGeometry = new THREE.Geometry();
-    xGeometry.vertices.push(
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(10, 0, 0)
-    );
-
-    var xAxis = new THREE.Line( xGeometry, new THREE.LineBasicMaterial({
-        color: 0xff0000
-    }) );
-    scene.add(xAxis);
-
-    var yGeometry = new THREE.Geometry();
-    yGeometry.vertices.push(
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(0, 10, 0)
-    );
-
-    var yAxis = new THREE.Line( yGeometry, new THREE.LineBasicMaterial({
-        color: 0x00ff00
-    }) );
-    scene.add(yAxis);
-
-    var zGeometry = new THREE.Geometry();
-    zGeometry.vertices.push(
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(0, 0, 10)
-    );
-
-    var zAxis = new THREE.Line( zGeometry, new THREE.LineBasicMaterial({
-        color: 0x0000ff
-    }) );
-    scene.add(zAxis);
-}
