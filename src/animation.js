@@ -37,14 +37,6 @@ export default function animate() {
         // 接触地面
         ball.position.setY(config.R);
         ball.v.setY(0);
-        // 摩擦力,仅地面存在
-        let f = _.cloneDeep(ball.v);
-        let af = f.negate().divideScalar(f.length() * config.VF);
-        if(ball.v.length() <= f.length()) {
-            ball.v = new THREE.Vector3(0, 0, 0);
-        } else {
-            ball.v = ball.v.add(f);
-        }
 
         // 地面跳跃
         if(keyboard[' ']) {
@@ -52,6 +44,15 @@ export default function animate() {
             let ah = vh.divideScalar(vh.length() * config.VH);
             ball.v = ball.v.add(ah);
             console.log('time: ' + Date.now() + ' v: ' + ball.v.y);
+        } else {
+            // 摩擦力,仅地面存在
+            let f = new THREE.Vector3(ball.v.x, 0, ball.v.z);
+            let af = f.negate().divideScalar(f.length() * config.VF);
+            if(ball.v.length() <= f.length()) {
+                ball.v = new THREE.Vector3(0, 0, 0);
+            } else {
+                ball.v = ball.v.add(f);
+            }
         }
     } else {
         // 重力
