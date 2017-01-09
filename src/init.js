@@ -13,7 +13,7 @@ export default function init() {
     scene = new THREE.Scene();
 
     // 初始化camera
-    camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10*config.focalDistance);
+    camera = new THREE.PerspectiveCamera(45, 4/3, 1, 100*config.focalDistance);
     camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     scene.add(camera);
@@ -22,6 +22,7 @@ export default function init() {
 
     initPlane();
     initBall();
+    initLight();
     addFunc();    
     createEvents();
 
@@ -47,23 +48,46 @@ function addFunc() {
 
 function initBall() {
     ball = new THREE.Mesh(new THREE.SphereGeometry(config.R, 16, 16),
-        new THREE.MeshBasicMaterial({
+        new THREE.MeshLambertMaterial({
             color: 0x00cccc,
-            wireframe: true
         })
     );
     ball.position.set(0, config.R, 0);
+    ball.castShadow = true;
+    ball.receiveShadow = true;
     scene.add(ball);
 }
 
 function initPlane() {
-    var plane = new THREE.Mesh(new THREE.PlaneGeometry(4*config.focalDistance, 4*config.focalDistance, 8, 8),
-        new THREE.MeshBasicMaterial({
-            color: 0xffffff,
-            wireframe: true
+    var plane = new THREE.Mesh(new THREE.CubeGeometry(4*config.focalDistance, 1, 4*config.focalDistance),
+        new THREE.MeshLambertMaterial({
+            color: 0xe8e8e8,
         })
     );
-    plane.rotateX(Math.PI/2);
+    plane.position.setY(-0.5);
+    plane.receiveShadow = true;
     scene.add(plane);
 }
 
+function initLight() {
+    var ambientLight = new THREE.AmbientLight(0x404040);
+    scene.add(ambientLight);
+
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMapSoft = true;
+    
+    var light = new THREE.PointLight(0xffffff, 1, 1000);
+    light.position.set(-4*config.focalDistance, 5*config.focalDistance, -5*config.focalDistance);
+    light.castShadow = true;
+
+    light.shadow.camera.near = 1;
+    light.shadow.camera.far = 1000;
+    light.shadow.camera.fov = 90;
+
+    light.shadow.mapSize.width = 1024;
+    light.shadow.mapSize.height = 1024;
+    scene.add(light);
+
+    // var lightHelper = new THREE.CameraHelper(light.shadow.camera);
+    // scene.add(lightHelper);
+}
