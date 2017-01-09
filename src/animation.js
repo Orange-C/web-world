@@ -10,9 +10,6 @@ export default function animate() {
     if(keyboard.x) {
         camera.rotateY(Math.PI/180, true);        
     }
-
-    let currentDir = new THREE.Vector3(camera.position.x, 0, camera.position.z);
-    let currentDirS = new THREE.Vector3(-camera.position.z, 0, camera.position.x);
     
     if(ball.position.y <= config.R) {
         // 接触地面
@@ -21,15 +18,15 @@ export default function animate() {
 
         // 地面跳跃
         if(keyboard[' ']) {
-            let vh = new THREE.Vector3(0, 1, 0);
-            let ah = vh.divideScalar(vh.length() * config.VH);
-            ball.v = ball.v.add(ah);
+            ball.v.y += 1 / config.VH;
         } else {
             // 摩擦力,仅地面存在
             let f = new THREE.Vector3(ball.v.x, 0, ball.v.z);
-            let af = f.negate().divideScalar(f.length() * config.VF);
+            f.negate().divideScalar(f.length() * config.VF);
             if(ball.v.length() <= f.length()) {
-                ball.v = new THREE.Vector3(0, 0, 0);
+                ball.v.x = 0;
+                ball.v.y = 0;
+                ball.v.z = 0;
             } else {
                 ball.v = ball.v.add(f);
             }
@@ -37,26 +34,24 @@ export default function animate() {
 
         // 改变小球速度
         if(keyboard.ArrowUp) {
-            let aUp = _.cloneDeep(currentDir);
-            ball.v = ball.v.add(aUp.negate().divideScalar(currentDir.length() * config.VA));
+            ball.v.x -= camera.position.x / config.VA;
+            ball.v.z -= camera.position.z / config.VA;
         }
         if(keyboard.ArrowDown) {
-            let aDown = _.cloneDeep(currentDir);
-            ball.v = ball.v.add(aDown.divideScalar(currentDir.length() * config.VA));
+            ball.v.x += camera.position.x / config.VA;
+            ball.v.z += camera.position.z / config.VA;
         }
         if(keyboard.ArrowLeft) {
-            let aLeft = _.cloneDeep(currentDirS);
-            ball.v = ball.v.add(aLeft.divideScalar(currentDir.length() * config.VA));
+            ball.v.x -= camera.position.z / config.VA;
+            ball.v.z += camera.position.x / config.VA;
         }
         if(keyboard.ArrowRight) {
-            let aRight = _.cloneDeep(currentDirS);
-            ball.v = ball.v.add(aRight.negate().divideScalar(currentDir.length() * config.VA));
+            ball.v.x += camera.position.z / config.VA;
+            ball.v.z -= camera.position.x / config.VA;
         }
     } else {
         // 重力
-        let vg = new THREE.Vector3(0, -1, 0);        
-        let ag = vg.divideScalar(vg.length() * config.VG);
-        ball.v = ball.v.add(ag);
+        ball.v.y -= 1 / config.VG;
     }
 
     // 小球运动
