@@ -5,7 +5,7 @@ import {createAxis} from './tools'
 export default function init() {
     // 初始化Renderer
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize(1200, 900);
+    renderer.setSize(600, 450);
     document.getElementsByTagName('body')[0].appendChild(renderer.domElement);
     renderer.setClearColor(0x000000);
 
@@ -57,7 +57,7 @@ function initBall() {
 }
 
 function initPlane() {
-    var plane = new THREE.Mesh(new THREE.PlaneGeometry(4*config.focalDistance, 4*config.focalDistance, 16, 16),
+    var plane = new THREE.Mesh(new THREE.PlaneGeometry(4*config.focalDistance, 4*config.focalDistance, 8, 8),
         new THREE.MeshBasicMaterial({
             color: 0xffffff,
             wireframe: true

@@ -39,12 +39,10 @@ export default function animate() {
         if(keyboard.ArrowUp) {
             let aUp = _.cloneDeep(currentDir);
             ball.v = ball.v.add(aUp.negate().divideScalar(currentDir.length() * config.VA));
-            // console.log(ball.v.length());
         }
         if(keyboard.ArrowDown) {
             let aDown = _.cloneDeep(currentDir);
             ball.v = ball.v.add(aDown.divideScalar(currentDir.length() * config.VA));
-            // console.log(ball.v.length());
         }
         if(keyboard.ArrowLeft) {
             let aLeft = _.cloneDeep(currentDirS);
