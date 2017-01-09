@@ -5,7 +5,7 @@ import {createAxis} from './tools'
 export default function init() {
     // 初始化Renderer
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize(600, 450);
+    renderer.setSize(1200, 900);
     document.getElementsByTagName('body')[0].appendChild(renderer.domElement);
     renderer.setClearColor(0x000000);
 
@@ -13,8 +13,8 @@ export default function init() {
     scene = new THREE.Scene();
 
     // 初始化camera
-    camera = new THREE.PerspectiveCamera(45, 4/3, 1, 1000);
-    camera.position.set(36, 27, 45);
+    camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10*config.focalDistance);
+    camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     scene.add(camera);
 
@@ -57,7 +57,7 @@ function initBall() {
 }
 
 function initPlane() {
-    var plane = new THREE.Mesh(new THREE.PlaneGeometry(64, 64, 16, 16),
+    var plane = new THREE.Mesh(new THREE.PlaneGeometry(4*config.focalDistance, 4*config.focalDistance, 16, 16),
         new THREE.MeshBasicMaterial({
             color: 0xffffff,
             wireframe: true
