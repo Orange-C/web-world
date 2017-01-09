@@ -32,22 +32,25 @@ export default function animate() {
             }
         }
 
+        let deltaX = (ball.position.x - camera.position.x) / config.VA;
+        let deltaZ = (ball.position.z - camera.position.z) / config.VA;
+
         // 改变小球速度
         if(keyboard.ArrowUp) {
-            ball.v.x -= camera.position.x / config.VA;
-            ball.v.z -= camera.position.z / config.VA;
+            ball.v.x += deltaX;
+            ball.v.z += deltaZ;
         }
         if(keyboard.ArrowDown) {
-            ball.v.x += camera.position.x / config.VA;
-            ball.v.z += camera.position.z / config.VA;
+            ball.v.x -= deltaX;
+            ball.v.z -= deltaZ;
         }
         if(keyboard.ArrowLeft) {
-            ball.v.x -= camera.position.z / config.VA;
-            ball.v.z += camera.position.x / config.VA;
+            ball.v.x += deltaZ;
+            ball.v.z -= deltaX;
         }
         if(keyboard.ArrowRight) {
-            ball.v.x += camera.position.z / config.VA;
-            ball.v.z -= camera.position.x / config.VA;
+            ball.v.x -= deltaZ;
+            ball.v.z += deltaX;
         }
     } else {
         // 重力
@@ -56,7 +59,9 @@ export default function animate() {
 
     // 小球运动
     ball.position.set(ball.position.x + ball.v.x, ball.position.y + ball.v.y, ball.position.z + ball.v.z);
-    
+    camera.position.set(camera.position.x + ball.v.x, camera.position.y + ball.v.y, camera.position.z + ball.v.z);
+
+    camera.lookAt(ball.position);
     renderer.render(scene, camera);
     id = requestAnimationFrame(animate);
 }

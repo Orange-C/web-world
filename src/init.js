@@ -1,6 +1,6 @@
-import {createEvents} from './keyboard';
+import { createEvents } from './keyboard';
 import config from './config';
-import {createAxis} from './tools'
+import { createAxis, addV, subtractV } from './tools'
 
 export default function init() {
     // 初始化Renderer
@@ -37,10 +37,11 @@ function addFunc() {
             delta = -delta;
         }
 
-        let x = this.position.x * Math.cos(delta) - this.position.z * Math.sin(delta);
-        let z = this.position.z * Math.cos(delta) + this.position.x * Math.sin(delta);
-        camera.position.set(x, this.position.y, z);
-        camera.lookAt(new THREE.Vector3(0, 0, 0));
+        let r = subtractV(ball.position, camera.position);
+        r.negate();
+        let newR = new THREE.Vector3(r.x * Math.cos(delta) - r.z * Math.sin(delta), r.y, r.z * Math.cos(delta) + r.x * Math.sin(delta)) 
+        let newP = addV(camera.position, subtractV(newR, r));
+        camera.position.set(newP.x, newP.y, newP.z);
     }
 
     ball.v = new THREE.Vector3(0, 0, 0);
@@ -59,7 +60,7 @@ function initBall() {
 }
 
 function initPlane() {
-    var plane = new THREE.Mesh(new THREE.CubeGeometry(4*config.focalDistance, 1, 4*config.focalDistance),
+    var plane = new THREE.Mesh(new THREE.CubeGeometry(16*config.focalDistance, 1, 16*config.focalDistance),
         new THREE.MeshLambertMaterial({
             color: 0xe8e8e8,
         })

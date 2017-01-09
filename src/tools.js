@@ -1,3 +1,11 @@
+export function addV(v1, v2) {
+    return new THREE.Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+}
+
+export function subtractV(v1, v2) {
+    return new THREE.Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+}
+
 export function createAxis() {
     let len = 100;
     // 生成坐标系
