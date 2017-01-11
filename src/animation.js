@@ -18,9 +18,9 @@ export default function animate() {
 
         // 地面跳跃
         if(keyboard[' ']) {
-            ball.f.add(new THREE.Vector3(0, 1/config.FJ, 0));
+            ball.f.y += 1/config.FJ;
         } else {
-            // 摩擦力,仅地面存在
+            // 摩擦力,仅平面存在
             let f = new THREE.Vector3(ball.v.x, ball.v.y, ball.v.z);
             f.negate().divideScalar(f.length() * config.FF);
             if(ball.v.length() <= f.length()) {
@@ -35,27 +35,33 @@ export default function animate() {
         let deltaX = (ball.position.x - camera.position.x) / config.FA;
         let deltaZ = (ball.position.z - camera.position.z) / config.FA;
 
-        // 改变小球速度
-        if(keyboard.ArrowUp) {
-            ball.f.add(new THREE.Vector3(deltaX, 0, deltaZ));
-        }
-        if(keyboard.ArrowDown) {
-            ball.f.add(new THREE.Vector3(-deltaX, 0, -deltaZ));
-        }
-        if(keyboard.ArrowLeft) {
-            ball.f.add(new THREE.Vector3(deltaZ, 0, -deltaX));
-        }
-        if(keyboard.ArrowRight) {
-            ball.f.add(new THREE.Vector3(-deltaZ, 0, +deltaX));
+        if(ball.v.length() < 0.8) { // 最大速度
+            // 改变小球速度
+            if(keyboard.ArrowUp) {
+                ball.f.x += deltaX;
+                ball.f.z += deltaZ;
+            }
+            if(keyboard.ArrowDown) {
+                ball.f.x -= deltaX;
+                ball.f.z -= deltaZ;
+            }
+            if(keyboard.ArrowLeft) {
+                ball.f.x += deltaZ;
+                ball.f.z -= deltaX;
+            }
+            if(keyboard.ArrowRight) {
+                ball.f.x -= deltaZ;
+                ball.f.z += deltaX;
+            }
         }
 
         // 支持力
-        ball.f.add(new THREE.Vector3(0, 1/config.FG, 0));
+        ball.f.y += 1/config.FG;
     }
 
     // 重力
-    ball.f.add(new THREE.Vector3(0, -1/config.FG, 0));
-
+    ball.f.y += -1/config.FG;
+    
     let a = ball.f.divideScalar(ball.m);
     ball.v.add(a);
     ball.f = new THREE.Vector3(0, 0, 0); 

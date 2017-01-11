@@ -4,7 +4,11 @@ import { createAxis, addV, subtractV } from './tools'
 
 export default function init() {
     // 初始化Renderer
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({
+        antialias:true,
+        precision:"highp",
+        preserveDrawingBuffer:true
+    });
     renderer.setSize(600, 450);
     document.getElementsByTagName('body')[0].appendChild(renderer.domElement);
     renderer.setClearColor(0x000000);
@@ -70,6 +74,16 @@ function initPlane() {
     plane.position.setY(-0.5);
     plane.receiveShadow = true;
     scene.add(plane);
+
+    var obj = new THREE.Mesh(new THREE.CubeGeometry(4, 4, 4),
+        new THREE.MeshLambertMaterial({
+            color: 0xff0000,
+        })
+    );
+    obj.position.setX(-5);
+    obj.castShadow = true;
+    obj.receiveShadow = true;
+    scene.add(obj);
 }
 
 function initLight() {
