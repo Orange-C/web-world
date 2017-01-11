@@ -59,6 +59,24 @@ var config = {
         }]
     },
 
+    devServer: {
+        port: 3000,
+        hot: true,
+        // Enable special support for Hot Module Replacement
+        // Page is no longer updated, but a "webpackHotUpdate" message is sent to the content
+        // Use "webpack/hot/dev-server" as additional module in your entry point
+        // Note: this does _not_ add the `HotModuleReplacementPlugin` like the CLI option does. 
+
+        historyApiFallback: true,
+        // webpack-dev-middleware options
+        quiet: false,
+        noInfo: false,
+        stats: {
+            chunks: false,
+            colors: true
+        }
+    },
+
     postcss: function () {
         return [precss, autoprefixer];
     },

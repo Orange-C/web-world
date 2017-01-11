@@ -4,7 +4,7 @@
   "description": "3d web world",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --inline --hot --progress --no-info",
+    "start": "webpack-dev-server --inline --hot --progress",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

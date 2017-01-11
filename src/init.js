@@ -37,11 +37,11 @@ function addFunc() {
             delta = -delta;
         }
 
-        let r = subtractV(ball.position, camera.position);
+        let r = subtractV(ball.position, this.position);
         r.negate();
         let newR = new THREE.Vector3(r.x * Math.cos(delta) - r.z * Math.sin(delta), r.y, r.z * Math.cos(delta) + r.x * Math.sin(delta)) 
-        let newP = addV(camera.position, subtractV(newR, r));
-        camera.position.set(newP.x, newP.y, newP.z);
+        let newP = addV(this.position, subtractV(newR, r));
+        this.position.set(newP.x, newP.y, newP.z);
     }
 
     ball.v = new THREE.Vector3(0, 0, 0);
