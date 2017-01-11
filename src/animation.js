@@ -18,11 +18,11 @@ export default function animate() {
 
         // 地面跳跃
         if(keyboard[' ']) {
-            ball.v.y += 1 / config.VH;
+            ball.f.add(new THREE.Vector3(0, 1/config.FJ, 0));
         } else {
             // 摩擦力,仅地面存在
-            let f = new THREE.Vector3(ball.v.x, 0, ball.v.z);
-            f.negate().divideScalar(f.length() * config.VF);
+            let f = new THREE.Vector3(ball.v.x, ball.v.y, ball.v.z);
+            f.negate().divideScalar(f.length() * config.FF);
             if(ball.v.length() <= f.length()) {
                 ball.v.x = 0;
                 ball.v.y = 0;
@@ -32,30 +32,33 @@ export default function animate() {
             }
         }
 
-        let deltaX = (ball.position.x - camera.position.x) / config.VA;
-        let deltaZ = (ball.position.z - camera.position.z) / config.VA;
+        let deltaX = (ball.position.x - camera.position.x) / config.FA;
+        let deltaZ = (ball.position.z - camera.position.z) / config.FA;
 
         // 改变小球速度
         if(keyboard.ArrowUp) {
-            ball.v.x += deltaX;
-            ball.v.z += deltaZ;
+            ball.f.add(new THREE.Vector3(deltaX, 0, deltaZ));
         }
         if(keyboard.ArrowDown) {
-            ball.v.x -= deltaX;
-            ball.v.z -= deltaZ;
+            ball.f.add(new THREE.Vector3(-deltaX, 0, -deltaZ));
         }
         if(keyboard.ArrowLeft) {
-            ball.v.x += deltaZ;
-            ball.v.z -= deltaX;
+            ball.f.add(new THREE.Vector3(deltaZ, 0, -deltaX));
         }
         if(keyboard.ArrowRight) {
-            ball.v.x -= deltaZ;
-            ball.v.z += deltaX;
+            ball.f.add(new THREE.Vector3(-deltaZ, 0, +deltaX));
         }
-    } else {
-        // 重力
-        ball.v.y -= 1 / config.VG;
+
+        // 支持力
+        ball.f.add(new THREE.Vector3(0, 1/config.FG, 0));
     }
+
+    // 重力
+    ball.f.add(new THREE.Vector3(0, -1/config.FG, 0));
+
+    let a = ball.f.divideScalar(ball.m);
+    ball.v.add(a);
+    ball.f = new THREE.Vector3(0, 0, 0); 
 
     // 小球运动
     ball.position.set(ball.position.x + ball.v.x, ball.position.y + ball.v.y, ball.position.z + ball.v.z);

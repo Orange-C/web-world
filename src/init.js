@@ -45,10 +45,12 @@ function addFunc() {
     }
 
     ball.v = new THREE.Vector3(0, 0, 0);
+    ball.f = new THREE.Vector3(0, 0, 0);
+    ball.m = 1;
 }
 
 function initBall() {
-    ball = new THREE.Mesh(new THREE.SphereGeometry(config.R, 16, 16),
+    ball = new THREE.Mesh(new THREE.SphereGeometry(config.R, 32, 32),
         new THREE.MeshLambertMaterial({
             color: 0x00cccc,
         })
@@ -78,7 +80,7 @@ function initLight() {
     renderer.shadowMapSoft = true;
     
     var light = new THREE.PointLight(0xffffff, 1, 1000);
-    light.position.set(-4*config.focalDistance, 5*config.focalDistance, -5*config.focalDistance);
+    light.position.set(-4*config.focalDistance, 5*config.focalDistance, 5*config.focalDistance);
     light.castShadow = true;
 
     light.shadow.camera.near = 1;
