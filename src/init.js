@@ -72,6 +72,7 @@ function addFunc() {
         this.position.set(newP.x, newP.y, newP.z);
     }
 
+    ball.newP = new THREE.Vector3(0, 0, 0);
     ball.v = new THREE.Vector3(0, 0, 0);
     ball.f = new THREE.Vector3(0, 0, 0);
     ball.m = 1;
