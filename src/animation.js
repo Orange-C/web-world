@@ -1,5 +1,8 @@
 import {keyboard} from './keyboard';
 import config from './config';
+import {collisionObjs, collisionDetection} from './collision';
+
+let vDom = document.getElementById('ball-v');
 
 export default function animate() {
     // 摄像机旋转
@@ -14,6 +17,8 @@ export default function animate() {
         // 接触地面
         ball.position.setY(config.R);
         ball.v.setY(0);
+        // 支持力
+        ball.f.y += 1/config.FG;
 
         // 地面跳跃
         if(keyboard[32]) {
@@ -53,17 +58,20 @@ export default function animate() {
                 ball.f.z += deltaX;
             }
         }
-
-        // 支持力
-        ball.f.y += 1/config.FG;
     }
 
     // 重力
     ball.f.y += -1/config.FG;
+
+    collisionDetection(ball);
     
     let a = ball.f.divideScalar(ball.m);
     ball.v.add(a);
     ball.f = new THREE.Vector3(0, 0, 0); 
+
+
+    let vNum = ball.v.length().toFixed(2);
+    vDom.textContent = vNum;
 
     // 小球运动
     ball.position.set(ball.position.x + ball.v.x, ball.position.y + ball.v.y, ball.position.z + ball.v.z);
