@@ -3,11 +3,11 @@ export var keyboard = {};
 export function createEvents() {
     document.addEventListener('keydown', (e) => {
         e.preventDefault();
-        keyboard[e.key] = true;
-        // console.log(e.key);
+        keyboard[e.keyCode] = true;
+        console.log(e.keyCode);
     });
     document.addEventListener('keyup', (e) => {
         e.preventDefault();        
-        keyboard[e.key] = false;
+        keyboard[e.keyCode] = false;
     });
 }

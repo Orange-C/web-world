@@ -3,10 +3,10 @@ import config from './config';
 
 export default function animate() {
     // 摄像机旋转
-    if(keyboard.z) {
+    if(keyboard[90]) {
         camera.rotateY(Math.PI/180);
     }
-    if(keyboard.x) {
+    if(keyboard[88]) {
         camera.rotateY(Math.PI/180, true);        
     }
     
@@ -16,7 +16,7 @@ export default function animate() {
         ball.v.setY(0);
 
         // 地面跳跃
-        if(keyboard[' ']) {
+        if(keyboard[32]) {
             ball.f.y += 1/config.FJ;
         } else {
             // 摩擦力,仅平面存在
@@ -36,19 +36,19 @@ export default function animate() {
 
         if(ball.v.length() < 0.8) { // 最大速度
             // 改变小球速度
-            if(keyboard.ArrowUp) {
+            if(keyboard[38]) { // up
                 ball.f.x += deltaX;
                 ball.f.z += deltaZ;
             }
-            if(keyboard.ArrowDown) {
+            if(keyboard[40]) { // down
                 ball.f.x -= deltaX;
                 ball.f.z -= deltaZ;
             }
-            if(keyboard.ArrowLeft) {
+            if(keyboard[37]) { // left
                 ball.f.x += deltaZ;
                 ball.f.z -= deltaX;
             }
-            if(keyboard.ArrowRight) {
+            if(keyboard[39]) { //right
                 ball.f.x -= deltaZ;
                 ball.f.z += deltaX;
             }
