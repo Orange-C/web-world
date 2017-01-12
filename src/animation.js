@@ -1,5 +1,4 @@
 import {keyboard} from './keyboard';
-import _ from 'lodash';
 import config from './config';
 
 export default function animate() {

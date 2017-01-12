@@ -1,16 +1,15 @@
-var path = require('path')
-var webpack = require('webpack')
-var precss = require('precss')
-var autoprefixer = require('autoprefixer')
+var path = require('path');
+var webpack = require('webpack');
+var precss = require('precss');
+var autoprefixer = require('autoprefixer');
 
-var NODE_MODULES_PATH = path.join(__dirname, 'node_modules')
-var PROJECT_PATH = path.join(__dirname, 'src')
+var NODE_MODULES_PATH = path.join(__dirname, 'node_modules');
+var PROJECT_PATH = path.join(__dirname, 'src');
 
 var config = {
     entry: [
         // 'webpack-dev-server/client?path=http://127.0.0.1:8000/__webpack_hmr',
         // 'webpack-hot-middleware/client?path=http://127.0.0.1:8003/__webpack_hmr',
-        'babel-polyfill',
         path.resolve(PROJECT_PATH, 'index.js')
     ],
 
@@ -84,7 +83,7 @@ var config = {
     plugins: [
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin(),
+        new webpack.NoErrorsPlugin()
     ]
 }
 
