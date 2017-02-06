@@ -22,7 +22,6 @@ function BoxAndBall(box, ball) {
             transV[i] = 1;
         }
     }
-    // console.log(transV.y);
     let h = box.geometry.vertices[0];
     let u = subtractV(v, h);
 
@@ -37,6 +36,8 @@ function BoxAndBall(box, ball) {
         if(u.z < 0) tempU.z = 0;
 
         let ulen = tempU.length();
+
+        if(ulen <= ball.R) console.log(ulen);
         
         isCollided = ulen == 0 || ulen <= ball.R;
     }
@@ -53,6 +54,7 @@ function BoxAndBall(box, ball) {
             ball.f.z = 0;
         }
         if(u.z <= 0 && u.x <= 0 && u.y >= 0) {
+            isPlane = true;
             ball.v.y = 0;
             ball.f.y = 0;
         }
@@ -79,26 +81,27 @@ function BoxAndBall(box, ball) {
 function divideFV(u, trans) {
     let unitU = cloneV(u).normalize();
 
-    if(ball.f.length() || ball.v.length()) {
-        console.log('f: ' + logV(ball.f));
-        console.log('v: ' + logV(ball.v));
-    }
+    // if(ball.f.length() || ball.v.length()) {
+    //     console.log('f: ' + logV(ball.f));
+    //     console.log('v: ' + logV(ball.v));
+    // }
 
     ball.f.multiply(trans);
     ball.v.multiply(trans);
     
-    let tempF = unitU.multiplyScalar(dotV(ball.f, u) / u.length());
+    let tempF = unitU.multiplyScalar(dotV(ball.f, unitU));
     ball.f.sub(tempF);
 
     unitU = cloneV(u).normalize();
-    let tempV = unitU.multiplyScalar(dotV(ball.v, u) / u.length());
+    let tempV = unitU.multiplyScalar(dotV(ball.v, unitU));
     ball.v.sub(tempV);
 
     ball.f.divide(trans);
     ball.v.divide(trans);
-    if(ball.f.length() || ball.v.length()) {
-        console.log('after');
-        console.log('f: ' + logV(ball.f));
-        console.log('v: ' + logV(ball.v));
-    }
+
+    // if(ball.f.length() || ball.v.length()) {
+    //     console.log('after');
+    //     console.log('f: ' + logV(ball.f));
+    //     console.log('v: ' + logV(ball.v));
+    // }
 }

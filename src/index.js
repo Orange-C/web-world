@@ -12,6 +12,7 @@ window.scene = scene;
 window.camera = camera;
 window.ball = ball;
 window.id = id;
+window.isPlane = false; //是否在平面上
 
 init();
 id = requestAnimationFrame(animate);
