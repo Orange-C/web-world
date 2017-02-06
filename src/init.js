@@ -113,4 +113,16 @@ function initPlane() {
     obj.receiveShadow = true;
     collisionObjs.push(obj);
     scene.add(obj);
+
+    // var obj2 = new THREE.Mesh(new THREE.BoxGeometry(4, 2, 4),
+    //     new THREE.MeshLambertMaterial({
+    //         color: 0x0000ff,
+    //     })
+    // );
+    // obj2.position.setX(-9);
+    // obj2.position.setY(1);
+    // obj2.castShadow = true;
+    // obj2.receiveShadow = true;
+    // collisionObjs.push(obj2);
+    // scene.add(obj2);
 }

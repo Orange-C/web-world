@@ -1,9 +1,21 @@
+export function cloneV(v) {
+    return new THREE.Vector3(v.x, v.y, v.z);
+}
+
 export function addV(v1, v2) {
     return new THREE.Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
 }
 
 export function subtractV(v1, v2) {
     return new THREE.Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+}
+
+export function dotV(v1, v2) {
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+export function logV(v) {
+    return 'x: ' + v.x + ' y: ' + v.y + ' z:' + v.z;
 }
 
 export function createAxis() {
