@@ -85,6 +85,11 @@ function divideFV(u, trans) {
     //     console.log('v: ' + logV(ball.v));
     // }
 
+    if(ball.v.length() < 0.2) {
+        let addV = cloneV(ball.v).normalize().multiplyScalar(0.05);
+        ball.v.add(addV);
+    }
+    
     ball.f.multiply(trans);
     ball.v.multiply(trans);
 
@@ -97,9 +102,9 @@ function divideFV(u, trans) {
     ball.f.divide(trans);
     ball.v.divide(trans);
 
-    if(ball.f.length() || ball.v.length()) {
-        console.log('after');
-        console.log('f: ' + logV(ball.f));
-        console.log('v: ' + logV(ball.v));
-    }
+    // if(ball.f.length() || ball.v.length()) {
+    //     console.log('after');
+    //     console.log('f: ' + logV(ball.f));
+    //     console.log('v: ' + logV(ball.v));
+    // }
 }
