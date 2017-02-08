@@ -81,8 +81,14 @@ export default function animate() {
     let vNum = ball.v.length().toFixed(2);
     vDom.textContent = vNum;
 
-    ball.position.set(ball.position.x + ball.v.x, ball.position.y + ball.v.y, ball.position.z + ball.v.z);
-    camera.position.set(camera.position.x + ball.v.x, camera.position.y + ball.v.y, camera.position.z + ball.v.z);
+    if(ball.position.y + ball.v.y < -30) {
+        ball.position.set(0, 10, 0);
+        ball.v = new THREE.Vector3(0, 0, 0);
+        camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
+    } else {
+        ball.position.set(ball.position.x + ball.v.x, ball.position.y + ball.v.y, ball.position.z + ball.v.z);
+        camera.position.set(camera.position.x + ball.v.x, camera.position.y + ball.v.y, camera.position.z + ball.v.z);
+    }
 
     camera.lookAt(ball.position);
     renderer.render(scene, camera);

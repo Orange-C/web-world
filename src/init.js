@@ -100,7 +100,6 @@ function initPlane() {
     plane.position.setY(-0.5);
     plane.receiveShadow = true;
     collisionObjs.push(plane);
-    //地面暂时不做碰撞判断
     scene.add(plane);
 
     var obj = new THREE.Mesh(new THREE.BoxGeometry(8, 2, 8),
@@ -108,22 +107,22 @@ function initPlane() {
             color: 0xff0000,
         })
     );
-    obj.position.setX(-4);
+    obj.position.setX(0);
     obj.position.setY(1);
     obj.castShadow = true;
     obj.receiveShadow = true;
     collisionObjs.push(obj);
     scene.add(obj);
 
-    var obj2 = new THREE.Mesh(new THREE.BoxGeometry(4, 2, 4),
-        new THREE.MeshLambertMaterial({
-            color: 0x0000ff,
-        })
-    );
-    obj2.position.setX(2);
-    obj2.position.setY(1);
-    obj2.castShadow = true;
-    obj2.receiveShadow = true;
-    collisionObjs.push(obj2);
-    scene.add(obj2);
+    // var obj2 = new THREE.Mesh(new THREE.BoxGeometry(4, 2, 4),
+    //     new THREE.MeshLambertMaterial({
+    //         color: 0x0000ff,
+    //     })
+    // );
+    // obj2.position.setX(2);
+    // obj2.position.setY(1);
+    // obj2.castShadow = true;
+    // obj2.receiveShadow = true;
+    // collisionObjs.push(obj2);
+    // scene.add(obj2);
 }
