@@ -1,4 +1,5 @@
 import { createEvents } from './keyboard';
+import { collisionObjs } from './collision';
 import config from './config';
 import { createAxis, addV, subtractV } from './tools'
 
@@ -33,59 +34,6 @@ export default function init() {
     renderer.render(scene, camera);
 }
 
-function addFunc() {
-    camera.rotateY = function(rad, minus) {
-        let delta = rad;
-
-        if(minus) {
-            delta = -delta;
-        }
-
-        let r = subtractV(ball.position, this.position);
-        r.negate();
-        let newR = new THREE.Vector3(r.x * Math.cos(delta) - r.z * Math.sin(delta), r.y, r.z * Math.cos(delta) + r.x * Math.sin(delta)) 
-        let newP = addV(this.position, subtractV(newR, r));
-        this.position.set(newP.x, newP.y, newP.z);
-    }
-
-    ball.v = new THREE.Vector3(0, 0, 0);
-    ball.f = new THREE.Vector3(0, 0, 0);
-    ball.m = 1;
-}
-
-function initBall() {
-    ball = new THREE.Mesh(new THREE.SphereGeometry(config.R, 32, 32),
-        new THREE.MeshLambertMaterial({
-            color: 0x00cccc,
-        })
-    );
-    ball.position.set(0, config.R, 0);
-    ball.castShadow = true;
-    ball.receiveShadow = true;
-    scene.add(ball);
-}
-
-function initPlane() {
-    var plane = new THREE.Mesh(new THREE.CubeGeometry(16*config.focalDistance, 1, 16*config.focalDistance),
-        new THREE.MeshLambertMaterial({
-            color: 0xe8e8e8,
-        })
-    );
-    plane.position.setY(-0.5);
-    plane.receiveShadow = true;
-    scene.add(plane);
-
-    var obj = new THREE.Mesh(new THREE.CubeGeometry(4, 4, 4),
-        new THREE.MeshLambertMaterial({
-            color: 0xff0000,
-        })
-    );
-    obj.position.setX(-5);
-    obj.castShadow = true;
-    obj.receiveShadow = true;
-    scene.add(obj);
-}
-
 function initLight() {
     var ambientLight = new THREE.AmbientLight(0x404040);
     scene.add(ambientLight);
@@ -107,4 +55,75 @@ function initLight() {
 
     // var lightHelper = new THREE.CameraHelper(light.shadow.camera);
     // scene.add(lightHelper);
+}
+
+function addFunc() {
+    camera.rotateY = function(rad, minus) {
+        let delta = rad;
+
+        if(minus) {
+            delta = -delta;
+        }
+
+        let r = subtractV(ball.position, this.position);
+        r.negate();
+        let newR = new THREE.Vector3(r.x * Math.cos(delta) - r.z * Math.sin(delta), r.y, r.z * Math.cos(delta) + r.x * Math.sin(delta)) 
+        let newP = addV(this.position, subtractV(newR, r));
+        this.position.set(newP.x, newP.y, newP.z);
+    }
+
+    ball.newP = new THREE.Vector3(0, 0, 0);
+    ball.v = new THREE.Vector3(0, 0, 0);
+    ball.f = new THREE.Vector3(0, 0, 0);
+    ball.m = 1;
+    ball.R = config.R;
+}
+
+function initBall() {
+    ball = new THREE.Mesh(new THREE.SphereGeometry(config.R, 32, 32),
+        new THREE.MeshLambertMaterial({
+            color: 0x00cccc,
+        })
+    );
+    ball.position.set(0, 10, 0);
+    ball.castShadow = true;
+    ball.receiveShadow = true;
+    scene.add(ball);
+}
+
+function initPlane() {
+    var plane = new THREE.Mesh(new THREE.BoxGeometry(16*config.focalDistance, 1, 16*config.focalDistance),
+        new THREE.MeshLambertMaterial({
+            color: 0xe8e8e8,
+        })
+    );
+    plane.position.setY(-0.5);
+    plane.receiveShadow = true;
+    collisionObjs.push(plane);
+    //地面暂时不做碰撞判断
+    scene.add(plane);
+
+    var obj = new THREE.Mesh(new THREE.BoxGeometry(8, 2, 8),
+        new THREE.MeshLambertMaterial({
+            color: 0xff0000,
+        })
+    );
+    obj.position.setX(-4);
+    obj.position.setY(1);
+    obj.castShadow = true;
+    obj.receiveShadow = true;
+    collisionObjs.push(obj);
+    scene.add(obj);
+
+    var obj2 = new THREE.Mesh(new THREE.BoxGeometry(4, 2, 4),
+        new THREE.MeshLambertMaterial({
+            color: 0x0000ff,
+        })
+    );
+    obj2.position.setX(2);
+    obj2.position.setY(1);
+    obj2.castShadow = true;
+    obj2.receiveShadow = true;
+    collisionObjs.push(obj2);
+    scene.add(obj2);
 }

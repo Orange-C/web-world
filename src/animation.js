@@ -1,5 +1,10 @@
 import {keyboard} from './keyboard';
 import config from './config';
+import {collisionObjs, collisionDetection} from './collision';
+import { addV, subtractV } from './tools'
+
+
+let vDom = document.getElementById('ball-v');
 
 export default function animate() {
     // 摄像机旋转
@@ -10,10 +15,8 @@ export default function animate() {
         camera.rotateY(Math.PI/180, true);        
     }
     
-    if(ball.position.y <= config.R) {
-        // 接触地面
-        ball.position.setY(config.R);
-        ball.v.setY(0);
+    if(ball.isPlane) {
+        ball.isPlane = false;
 
         // 地面跳跃
         if(keyboard[32]) {
@@ -53,19 +56,31 @@ export default function animate() {
                 ball.f.z += deltaX;
             }
         }
-
-        // 支持力
-        ball.f.y += 1/config.FG;
     }
 
     // 重力
     ball.f.y += -1/config.FG;
     
-    let a = ball.f.divideScalar(ball.m);
+    // 假设加速度
+    let oldF = new THREE.Vector3(ball.f.x, ball.f.y, ball.f.z);
+    let a = oldF.divideScalar(ball.m);
+    let newV = addV(ball.v, a);
+
+    ball.newP.x = ball.position.x + newV.x;
+    ball.newP.y = ball.position.y + newV.y;
+    ball.newP.z = ball.position.z + newV.z;
+
+    collisionDetection(ball);
+
+    // 实际加速度
+    a = ball.f.divideScalar(ball.m);
     ball.v.add(a);
     ball.f = new THREE.Vector3(0, 0, 0); 
 
     // 小球运动
+    let vNum = ball.v.length().toFixed(2);
+    vDom.textContent = vNum;
+
     ball.position.set(ball.position.x + ball.v.x, ball.position.y + ball.v.y, ball.position.z + ball.v.z);
     camera.position.set(camera.position.x + ball.v.x, camera.position.y + ball.v.y, camera.position.z + ball.v.z);
 
