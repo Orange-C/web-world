@@ -11,11 +11,18 @@ export function subtractV(v1, v2) {
 }
 
 export function dotV(v1, v2) {
-    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+    var numX = v1.x * v2.x;
+    var numY = v1.y * v2.y;
+    var numZ = v1.z * v2.z;
+    return numX + numY + numZ;
 }
 
 export function logV(v) {
     return 'x: ' + v.x + ' y: ' + v.y + ' z:' + v.z;
+}
+
+export function formatFloat(f, digit) {
+    return parseInt(f * digit, 10) / digit;
 }
 
 export function createAxis() {

@@ -29,7 +29,7 @@ function BoxAndBall(box, ball) {
     let tempU = new THREE.Vector3(u.x, u.y, u.z);
 
     if(u.x >= 0 && u.y >= 0 && u.z >= 0) {
-        isCollided =  u.length() <= ball.R;
+        isCollided = u.length() <= ball.R;
     } else {
         if(u.x < 0) tempU.x = 0;
         if(u.y < 0) tempU.y = 0;
@@ -37,13 +37,12 @@ function BoxAndBall(box, ball) {
 
         let ulen = tempU.length();
 
-        if(ulen <= ball.R) console.log(ulen);
+        // if(ulen <= ball.R) console.log(ulen);
         
         isCollided = ulen == 0 || ulen <= ball.R;
     }
 
     if(isCollided) {
-        // console.log('x: ' + u.x + ' y: ' + u.y + ' z: ' + u.z );
         // 面碰撞
         if(u.z <= 0 && u.y <= 0 && u.x >= 0) {
             ball.v.x = 0;
@@ -54,7 +53,7 @@ function BoxAndBall(box, ball) {
             ball.f.z = 0;
         }
         if(u.z <= 0 && u.x <= 0 && u.y >= 0) {
-            isPlane = true;
+            ball.isPlane = true;
             ball.v.y = 0;
             ball.f.y = 0;
         }
@@ -86,14 +85,17 @@ function divideFV(u, trans) {
     //     console.log('v: ' + logV(ball.v));
     // }
 
+    let numV = dotV(ball.v, unitU);
+    let numF = dotV(ball.f, unitU);
+
     ball.f.multiply(trans);
     ball.v.multiply(trans);
     
-    let tempF = unitU.multiplyScalar(dotV(ball.f, unitU));
+    let tempF = unitU.multiplyScalar(numF);
     ball.f.sub(tempF);
 
     unitU = cloneV(u).normalize();
-    let tempV = unitU.multiplyScalar(dotV(ball.v, unitU));
+    let tempV = unitU.multiplyScalar(numV);
     ball.v.sub(tempV);
 
     ball.f.divide(trans);

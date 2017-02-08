@@ -15,13 +15,8 @@ export default function animate() {
         camera.rotateY(Math.PI/180, true);        
     }
     
-    if(isPlane) {
-        isPlane = false;
-        // 接触地面
-        // ball.position.setY(config.R);
-        // ball.v.setY(0);
-        // 支持力
-        // ball.f.y += 1/config.FG;
+    if(ball.isPlane) {
+        ball.isPlane = false;
 
         // 地面跳跃
         if(keyboard[32]) {
