@@ -52,25 +52,25 @@ function BoxAndBall(box, ball) {
             ball.v.z = 0;
             ball.f.z = 0;
         }
-        if(u.z <= 0 && u.x <= 0 && u.y >= 0) {
+        if(u.z < 0 && u.x < 0 && u.y > 0) {
             ball.isPlane = true;
             ball.v.y = 0;
             ball.f.y = 0;
         }
         // 点碰撞 
-        if(u.x >= 0 && u.y >=0 && u.z >=0 ) {
+        if(u.x > 0 && u.y >0 && u.z >0 ) {
             divideFV(u, transV);
         }
         // 对角线碰撞
-        if(u.z <= 0 && u.x >= 0 && u.y >= 0) {
+        if(u.z < 0 && u.x > 0 && u.y > 0) {
             u.z = 0;
             divideFV(u, transV);
         }
-        if(u.y <= 0 && u.x >= 0 && u.z >= 0) {
+        if(u.y < 0 && u.x > 0 && u.z > 0) {
             u.y = 0;
             divideFV(u, transV);
         }
-        if(u.x <= 0 && u.y >= 0 && u.z >= 0) {
+        if(u.x < 0 && u.y > 0 && u.z > 0) {
             u.x = 0;
             divideFV(u, transV);
         }
@@ -85,18 +85,19 @@ function divideFV(u, trans) {
     //     console.log('v: ' + logV(ball.v));
     // }
 
-    let numV = dotV(ball.v, unitU);
-    let numF = dotV(ball.f, unitU);
-
+    if(ball.v.length() < 0.2) {
+        let addV = cloneV(ball.v).normalize().multiplyScalar(0.05);
+        ball.v.add(addV);
+    }
+    
     ball.f.multiply(trans);
     ball.v.multiply(trans);
-    
-    let tempF = unitU.multiplyScalar(numF);
-    ball.f.sub(tempF);
 
-    unitU = cloneV(u).normalize();
-    let tempV = unitU.multiplyScalar(numV);
-    ball.v.sub(tempV);
+    let tV = cloneV(ball.v).projectOnVector(unitU);
+    let tF = cloneV(ball.f).projectOnVector(unitU);
+
+    ball.f.sub(tF);
+    ball.v.sub(tV);
 
     ball.f.divide(trans);
     ball.v.divide(trans);
