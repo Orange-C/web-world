@@ -1,4 +1,5 @@
-import { cloneV, addV, subtractV, dotV, logV } from './tools'
+import { cloneV, addV, subtractV, dotV, logV } from './utils'
+import config from './config';
 
 export var collisionObjs = [];
 
@@ -37,74 +38,72 @@ function BoxAndBall(box, ball) {
 
         let ulen = tempU.length();
 
-        // if(ulen <= ball.R) console.log(ulen);
-        
         isCollided = ulen == 0 || ulen <= ball.R;
     }
 
     if(isCollided) {
-        // 面碰撞
-        if(u.z <= 0 && u.y <= 0 && u.x >= 0) {
-            ball.v.x = 0;
-            ball.f.x = 0;
-        }
-        if(u.x <= 0 && u.y <= 0 && u.z >= 0) {
-            ball.v.z = 0;
-            ball.f.z = 0;
-        }
-        if(u.z < 0 && u.x < 0 && u.y > 0) {
-            ball.isPlane = true;
-            ball.v.y = 0;
-            ball.f.y = 0;
-        }
-        // 点碰撞 
-        if(u.x > 0 && u.y >0 && u.z >0 ) {
-            divideFV(u, transV);
-        }
-        // 对角线碰撞
-        if(u.z < 0 && u.x > 0 && u.y > 0) {
-            u.z = 0;
-            divideFV(u, transV);
-        }
-        if(u.y < 0 && u.x > 0 && u.z > 0) {
-            u.y = 0;
-            divideFV(u, transV);
-        }
-        if(u.x < 0 && u.y > 0 && u.z > 0) {
-            u.x = 0;
-            divideFV(u, transV);
-        }
+        handleCollision(ball, u, transV)
+    }
+}
+
+function handleCollision(ball, u, transV) {
+    // 面碰撞
+    if(u.z <= 0 && u.y <= 0 && u.x >= 0) {
+        ball.v.x = 0;
+        ball.f.x = 0;
+        return;
+    }
+    if(u.x <= 0 && u.y <= 0 && u.z >= 0) {
+        ball.v.z = 0;
+        ball.f.z = 0;
+        return;
+    }
+    if(u.z <= 0 && u.x <= 0 && u.y >= 0) {
+        ball.isPlane = true;
+        ball.v.y = 0;
+        ball.f.y = 0;
+        return;
+    }
+    // 点碰撞 
+    // if(u.x >= 0 && u.y >= 0 && u.z >= 0 ) {
+    //     divideFV(u, transV);
+    //     return;
+    // }
+    // 对角线碰撞
+    if(u.z <= 0 && u.x >= 0 && u.y >= 0) {
+        u.z = 0;
+        divideFV(u, transV);
+        return;
+    }
+    if(u.y <= 0 && u.x >= 0 && u.z >= 0) {
+        u.y = 0;
+        divideFV(u, transV);
+        return;
+    }
+    if(u.x <= 0 && u.y >= 0 && u.z >= 0) {
+        u.x = 0;
+        divideFV(u, transV);
+        return;
     }
 }
 
 function divideFV(u, trans) {
     let unitU = cloneV(u).normalize();
 
-    // if(ball.f.length() || ball.v.length()) {
-    //     console.log('f: ' + logV(ball.f));
-    //     console.log('v: ' + logV(ball.v));
-    // }
-
-    if(ball.v.length() < 0.2) {
-        let addV = cloneV(ball.v).normalize().multiplyScalar(0.05);
-        ball.v.add(addV);
+    // 修复低速情况的bug
+    let len = config.ball.v.length();
+    let minV = 0.2;
+    if(len < minV) {
+        let addV = cloneV(config.ball.v).normalize().multiplyScalar(minV - len);
+        config.ball.v.add(addV);
     }
     
-    ball.f.multiply(trans);
-    ball.v.multiply(trans);
+    config.ball.f.multiply(trans);
+    config.ball.v.multiply(trans);
 
-    let tV = cloneV(ball.v).projectOnVector(unitU);
-    let tF = cloneV(ball.f).projectOnVector(unitU);
+    config.ball.f.sub(cloneV(config.ball.f).projectOnVector(unitU));
+    config.ball.v.sub(cloneV(config.ball.v).projectOnVector(unitU));
 
-    ball.f.sub(tF);
-    ball.v.sub(tV);
-
-    ball.f.divide(trans);
-    ball.v.divide(trans);
-
-    // if(ball.f.length() || ball.v.length()) {
-    //     console.log('after');
-    //     console.log('f: ' + logV(ball.f));
-    //     console.log('v: ' + logV(ball.v));
-    // }
+    config.ball.f.divide(trans);
+    config.ball.v.divide(trans);
 }

@@ -1,3 +1,5 @@
+import config from './config';
+
 export function cloneV(v) {
     return new THREE.Vector3(v.x, v.y, v.z);
 }
@@ -21,10 +23,6 @@ export function logV(v) {
     return 'x: ' + v.x + ' y: ' + v.y + ' z:' + v.z;
 }
 
-export function formatFloat(f, digit) {
-    return parseInt(f * digit, 10) / digit;
-}
-
 export function createAxis() {
     let len = 100;
     // 生成坐标系
@@ -37,7 +35,7 @@ export function createAxis() {
     var xAxis = new THREE.Line( xGeometry, new THREE.LineBasicMaterial({
         color: 0xff0000
     }) );
-    scene.add(xAxis);
+    config.scene.add(xAxis);
 
     var yGeometry = new THREE.Geometry();
     yGeometry.vertices.push(
@@ -48,7 +46,7 @@ export function createAxis() {
     var yAxis = new THREE.Line( yGeometry, new THREE.LineBasicMaterial({
         color: 0x00ff00
     }) );
-    scene.add(yAxis);
+    config.scene.add(yAxis);
 
     var zGeometry = new THREE.Geometry();
     zGeometry.vertices.push(
@@ -59,5 +57,5 @@ export function createAxis() {
     var zAxis = new THREE.Line( zGeometry, new THREE.LineBasicMaterial({
         color: 0x0000ff
     }) );
-    scene.add(zAxis);
+    config.scene.add(zAxis);
 }
