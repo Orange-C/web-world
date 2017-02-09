@@ -3,7 +3,8 @@ import config from './config';
 import {collisionObjs, collisionDetection} from './collision';
 import { addV, subtractV } from './utils'
 
-let vDom = document.getElementById('ball-v');
+let vDom = document.querySelector('.ball-v');
+let resetBtn = document.querySelector('.reset-btn');
 
 export default function animate() {
     // 摄像机旋转
@@ -79,9 +80,7 @@ export default function animate() {
     vDom.textContent = vNum;
 
     if(config.ball.position.y + config.ball.v.y < -30) {
-        config.ball.position.set(0, 10, 0);
-        config.ball.v = new THREE.Vector3(0, 0, 0);
-        config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
+        reset()
     } else {
         config.ball.position.set(config.ball.position.x + config.ball.v.x, config.ball.position.y + config.ball.v.y, config.ball.position.z + config.ball.v.z);
         config.camera.position.set(config.camera.position.x + config.ball.v.x, config.camera.position.y + config.ball.v.y, config.camera.position.z + config.ball.v.z);
@@ -91,3 +90,11 @@ export default function animate() {
     config.renderer.render(config.scene, config.camera);
     config.id = requestAnimationFrame(animate);
 }
+
+function reset() {
+    config.ball.position.set(0, 10, 0);
+    config.ball.v = new THREE.Vector3(0, 0, 0);
+    config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
+}
+
+resetBtn.addEventListener('click', reset);

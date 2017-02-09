@@ -65,10 +65,10 @@ function handleCollision(ball, u, transV) {
         return;
     }
     // 点碰撞 
-    if(u.x >= 0 && u.y >= 0 && u.z >= 0 ) {
-        divideFV(u, transV);
-        return;
-    }
+    // if(u.x >= 0 && u.y >= 0 && u.z >= 0 ) {
+    //     divideFV(u, transV);
+    //     return;
+    // }
     // 对角线碰撞
     if(u.z <= 0 && u.x >= 0 && u.y >= 0) {
         u.z = 0;
@@ -92,7 +92,7 @@ function divideFV(u, trans) {
 
     // 修复低速情况的bug
     let len = config.ball.v.length();
-    let minV = 0.18;
+    let minV = 0.2;
     if(len < minV) {
         let addV = cloneV(config.ball.v).normalize().multiplyScalar(minV - len);
         config.ball.v.add(addV);

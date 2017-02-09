@@ -13,7 +13,7 @@ export default function init() {
         preserveDrawingBuffer:true
     });
     config.renderer.setSize(600, 450);
-    document.getElementById('canvas-box').appendChild(config.renderer.domElement);
+    document.querySelector('.canvas-box').appendChild(config.renderer.domElement);
     config.renderer.setClearColor(0x000000);
 
     // 初始化config.scene
@@ -110,7 +110,7 @@ function initPlane() {
     var obj = createNormalBlock({
         len: [8, 2, 8],
         pos: [-2, 1, 0],
-        color: 0xff0000
+        color: 0xf8f8f8
     });
     collisionObjs.push(obj);
     config.scene.add(obj);
@@ -118,7 +118,7 @@ function initPlane() {
     var obj2 = createNormalBlock({
         len: [8, 2, 8],
         pos: [-8, 3, 0],
-        color: 0x00ff00
+        color: 0xf8f8f8
     });
     collisionObjs.push(obj2);
     config.scene.add(obj2);
@@ -126,15 +126,16 @@ function initPlane() {
     var obj3 = createNormalBlock({
         len: [8, 2, 8],
         pos: [-14, 5, 0],
-        color: 0x0000ff
+        color: 0xf8f8f8
     });
     collisionObjs.push(obj3);
     config.scene.add(obj3);
 
     var wall1 = createNormalBlock({
         len: [30, 16, 2],
-        pos: [0, 8, 5],
+        pos: [-10, 8, 4.8],
         color: 0xffffff,
+        transparent: true,
         shadow: false,
     });
     collisionObjs.push(wall1);
@@ -142,8 +143,9 @@ function initPlane() {
 
     var wall2 = createNormalBlock({
         len: [30, 16, 2],
-        pos: [0, 8, -5],
+        pos: [-10, 8, -4.8],
         color: 0xffffff,
+        transparent: true,
         shadow: false,
     });
     collisionObjs.push(wall2);
