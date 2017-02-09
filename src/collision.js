@@ -79,7 +79,7 @@ function BoxAndBall(box, ball) {
 function divideFV(u, trans) {
     let unitU = cloneV(u).normalize();
 
-    // 修复低速情况下的bug
+    // 修复低速情况的bug
     let len = config.ball.v.length();
     let minV = 0.2;
     if(len < minV) {
