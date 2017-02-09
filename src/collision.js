@@ -1,4 +1,5 @@
 import { cloneV, addV, subtractV, dotV, logV } from './tools'
+import config from './config';
 
 export var collisionObjs = [];
 
@@ -80,31 +81,21 @@ function BoxAndBall(box, ball) {
 function divideFV(u, trans) {
     let unitU = cloneV(u).normalize();
 
-    // if(ball.f.length() || ball.v.length()) {
-    //     console.log('f: ' + logV(ball.f));
-    //     console.log('v: ' + logV(ball.v));
-    // }
-
-    if(ball.v.length() < 0.2) {
-        let addV = cloneV(ball.v).normalize().multiplyScalar(0.05);
-        ball.v.add(addV);
+    // 修复低速情况下的bug
+    if(config.ball.v.length() < 0.2) {
+        let addV = cloneV(config.ball.v).normalize().multiplyScalar(0.05);
+        config.ball.v.add(addV);
     }
     
-    ball.f.multiply(trans);
-    ball.v.multiply(trans);
+    config.ball.f.multiply(trans);
+    config.ball.v.multiply(trans);
 
-    let tV = cloneV(ball.v).projectOnVector(unitU);
-    let tF = cloneV(ball.f).projectOnVector(unitU);
+    let tV = cloneV(config.ball.v).projectOnVector(unitU);
+    let tF = cloneV(config.ball.f).projectOnVector(unitU);
 
-    ball.f.sub(tF);
-    ball.v.sub(tV);
+    config.ball.f.sub(tF);
+    config.ball.v.sub(tV);
 
-    ball.f.divide(trans);
-    ball.v.divide(trans);
-
-    // if(ball.f.length() || ball.v.length()) {
-    //     console.log('after');
-    //     console.log('f: ' + logV(ball.f));
-    //     console.log('v: ' + logV(ball.v));
-    // }
+    config.ball.f.divide(trans);
+    config.ball.v.divide(trans);
 }

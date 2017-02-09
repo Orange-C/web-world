@@ -1,17 +1,15 @@
 import init from './init'
-import animate from './animation'
 
-var renderer;
-var scene;
-var camera;
-var ball;
-var id; // animation id
+// var config.renderer;
+// var config.scene;
+// var config.camera;
+// var config.ball;
+// var id; // animation id
 
-window.renderer = renderer;
-window.scene = scene;
-window.camera = camera;
-window.ball = ball;
-window.id = id;
+// window.config.renderer = config.renderer;
+// window.config.scene = config.scene;
+// window.config.camera = config.camera;
+// window.config.ball = config.ball;
+// window.id = id;
 
 init();
-id = requestAnimationFrame(animate);

@@ -7,6 +7,12 @@ const config = {
     FF: 600, //摩擦系数，负相关
     FJ: 3, //跳跃系数，负相关
     FG: 100, //重力系数，负相关
+
+    renderer: null,
+    scene: null,
+    camera: null,
+    ball: null,
+    id: null, // animation id
 };
 
 export default config;
