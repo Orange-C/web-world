@@ -1,7 +1,7 @@
 import { createEvents } from './keyboard';
 import { collisionObjs } from './collision';
 import config from './config';
-import { createAxis, addV, subtractV } from './tools'
+import { createAxis, addV, subtractV } from './utils'
 import animate from './animation';
 
 export default function init() {
@@ -12,7 +12,7 @@ export default function init() {
         preserveDrawingBuffer:true
     });
     config.renderer.setSize(600, 450);
-    document.getElementsByTagName('body')[0].appendChild(config.renderer.domElement);
+    document.getElementById('canvas-box').appendChild(config.renderer.domElement);
     config.renderer.setClearColor(0x000000);
 
     // 初始化config.scene
@@ -74,12 +74,6 @@ function addFunc() {
         let newP = addV(this.position, subtractV(newR, r));
         this.position.set(newP.x, newP.y, newP.z);
     }
-
-    config.ball.newP = new THREE.Vector3(0, 0, 0);
-    config.ball.v = new THREE.Vector3(0, 0, 0);
-    config.ball.f = new THREE.Vector3(0, 0, 0);
-    config.ball.m = 1;
-    config.ball.R = config.R;
 }
 
 function initBall() {
@@ -91,6 +85,13 @@ function initBall() {
     config.ball.position.set(0, 10, 0);
     config.ball.castShadow = true;
     config.ball.receiveShadow = true;
+
+    config.ball.newP = new THREE.Vector3(0, 0, 0);
+    config.ball.v = new THREE.Vector3(0, 0, 0);
+    config.ball.f = new THREE.Vector3(0, 0, 0);
+    config.ball.m = 1;
+    config.ball.R = config.R;
+
     config.scene.add(config.ball);
 }
 

@@ -1,7 +1,7 @@
 import {keyboard} from './keyboard';
 import config from './config';
 import {collisionObjs, collisionDetection} from './collision';
-import { addV, subtractV } from './tools'
+import { addV, subtractV } from './utils'
 
 let vDom = document.getElementById('ball-v');
 

@@ -23,10 +23,6 @@ export function logV(v) {
     return 'x: ' + v.x + ' y: ' + v.y + ' z:' + v.z;
 }
 
-export function formatFloat(f, digit) {
-    return parseInt(f * digit, 10) / digit;
-}
-
 export function createAxis() {
     let len = 100;
     // 生成坐标系

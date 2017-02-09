@@ -1,4 +1,4 @@
-import { cloneV, addV, subtractV, dotV, logV } from './tools'
+import { cloneV, addV, subtractV, dotV, logV } from './utils'
 import config from './config';
 
 export var collisionObjs = [];
@@ -38,8 +38,6 @@ function BoxAndBall(box, ball) {
 
         let ulen = tempU.length();
 
-        // if(ulen <= ball.R) console.log(ulen);
-        
         isCollided = ulen == 0 || ulen <= ball.R;
     }
 
@@ -82,19 +80,17 @@ function divideFV(u, trans) {
     let unitU = cloneV(u).normalize();
 
     // 修复低速情况下的bug
-    if(config.ball.v.length() < 0.2) {
-        let addV = cloneV(config.ball.v).normalize().multiplyScalar(0.05);
+    let minV = 0.17;
+    if(config.ball.v.length() < minV) {
+        let addV = cloneV(config.ball.v).normalize().multiplyScalar(minV - config.ball.v.length());
         config.ball.v.add(addV);
     }
     
     config.ball.f.multiply(trans);
     config.ball.v.multiply(trans);
 
-    let tV = cloneV(config.ball.v).projectOnVector(unitU);
-    let tF = cloneV(config.ball.f).projectOnVector(unitU);
-
-    config.ball.f.sub(tF);
-    config.ball.v.sub(tV);
+    config.ball.f.sub(cloneV(config.ball.v).projectOnVector(unitU));
+    config.ball.v.sub(cloneV(config.ball.f).projectOnVector(unitU));
 
     config.ball.f.divide(trans);
     config.ball.v.divide(trans);
