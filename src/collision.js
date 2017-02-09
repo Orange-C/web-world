@@ -80,17 +80,18 @@ function divideFV(u, trans) {
     let unitU = cloneV(u).normalize();
 
     // 修复低速情况下的bug
-    let minV = 0.17;
-    if(config.ball.v.length() < minV) {
-        let addV = cloneV(config.ball.v).normalize().multiplyScalar(minV - config.ball.v.length());
+    let len = config.ball.v.length();
+    let minV = 0.2;
+    if(len < minV) {
+        let addV = cloneV(config.ball.v).normalize().multiplyScalar(minV - len);
         config.ball.v.add(addV);
     }
     
     config.ball.f.multiply(trans);
     config.ball.v.multiply(trans);
 
-    config.ball.f.sub(cloneV(config.ball.v).projectOnVector(unitU));
-    config.ball.v.sub(cloneV(config.ball.f).projectOnVector(unitU));
+    config.ball.f.sub(cloneV(config.ball.f).projectOnVector(unitU));
+    config.ball.v.sub(cloneV(config.ball.v).projectOnVector(unitU));
 
     config.ball.f.divide(trans);
     config.ball.v.divide(trans);

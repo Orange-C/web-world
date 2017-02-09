@@ -3,6 +3,7 @@ import { collisionObjs } from './collision';
 import config from './config';
 import { createAxis, addV, subtractV } from './utils'
 import animate from './animation';
+import { createNormalBlock } from './obj';
 
 export default function init() {
     // 初始化config.renderer
@@ -106,15 +107,11 @@ function initPlane() {
     collisionObjs.push(plane);
     config.scene.add(plane);
 
-    var obj = new THREE.Mesh(new THREE.BoxGeometry(8, 2, 8),
-        new THREE.MeshLambertMaterial({
-            color: 0xff0000,
-        })
-    );
-    obj.position.setX(0);
-    obj.position.setY(1);
-    obj.castShadow = true;
-    obj.receiveShadow = true;
+    var obj = createNormalBlock({
+        len: [8, 2, 8],
+        pos: [0, 1, 0],
+        color: 0xff0000
+    });
     collisionObjs.push(obj);
     config.scene.add(obj);
 }
