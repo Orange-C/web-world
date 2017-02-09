@@ -5,6 +5,7 @@ import config from './config';
  *  len: [x,y,z]
  *  pos: [x,y,z]
  *  color: 0xffffff;
+ *  shadow: boolean
  * }
  */
 export function createNormalBlock(conf) {
@@ -14,8 +15,9 @@ export function createNormalBlock(conf) {
         })
     );
     obj.position.set(...conf.pos);
-    obj.castShadow = true;
-    obj.receiveShadow = true;
-    
+    if(conf.shadow !== false) {
+        obj.castShadow = true;
+        obj.receiveShadow = true;
+    }
     return obj;
 }

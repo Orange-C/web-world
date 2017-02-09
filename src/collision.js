@@ -42,37 +42,48 @@ function BoxAndBall(box, ball) {
     }
 
     if(isCollided) {
-        // 面碰撞
-        if(u.z <= 0 && u.y <= 0 && u.x >= 0) {
-            ball.v.x = 0;
-            ball.f.x = 0;
-        }
-        if(u.x <= 0 && u.y <= 0 && u.z >= 0) {
-            ball.v.z = 0;
-            ball.f.z = 0;
-        }
-        if(u.z < 0 && u.x < 0 && u.y > 0) {
-            ball.isPlane = true;
-            ball.v.y = 0;
-            ball.f.y = 0;
-        }
-        // 点碰撞 
-        if(u.x > 0 && u.y >0 && u.z >0 ) {
-            divideFV(u, transV);
-        }
-        // 对角线碰撞
-        if(u.z < 0 && u.x > 0 && u.y > 0) {
-            u.z = 0;
-            divideFV(u, transV);
-        }
-        if(u.y < 0 && u.x > 0 && u.z > 0) {
-            u.y = 0;
-            divideFV(u, transV);
-        }
-        if(u.x < 0 && u.y > 0 && u.z > 0) {
-            u.x = 0;
-            divideFV(u, transV);
-        }
+        handleCollision(ball, u, transV)
+    }
+}
+
+function handleCollision(ball, u, transV) {
+    // 面碰撞
+    if(u.z <= 0 && u.y <= 0 && u.x >= 0) {
+        ball.v.x = 0;
+        ball.f.x = 0;
+        return;
+    }
+    if(u.x <= 0 && u.y <= 0 && u.z >= 0) {
+        ball.v.z = 0;
+        ball.f.z = 0;
+        return;
+    }
+    if(u.z <= 0 && u.x <= 0 && u.y >= 0) {
+        ball.isPlane = true;
+        ball.v.y = 0;
+        ball.f.y = 0;
+        return;
+    }
+    // 点碰撞 
+    if(u.x >= 0 && u.y >= 0 && u.z >= 0 ) {
+        divideFV(u, transV);
+        return;
+    }
+    // 对角线碰撞
+    if(u.z <= 0 && u.x >= 0 && u.y >= 0) {
+        u.z = 0;
+        divideFV(u, transV);
+        return;
+    }
+    if(u.y <= 0 && u.x >= 0 && u.z >= 0) {
+        u.y = 0;
+        divideFV(u, transV);
+        return;
+    }
+    if(u.x <= 0 && u.y >= 0 && u.z >= 0) {
+        u.x = 0;
+        divideFV(u, transV);
+        return;
     }
 }
 
@@ -81,7 +92,7 @@ function divideFV(u, trans) {
 
     // 修复低速情况的bug
     let len = config.ball.v.length();
-    let minV = 0.2;
+    let minV = 0.18;
     if(len < minV) {
         let addV = cloneV(config.ball.v).normalize().multiplyScalar(minV - len);
         config.ball.v.add(addV);

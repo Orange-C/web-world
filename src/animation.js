@@ -32,29 +32,27 @@ export default function animate() {
                 config.ball.v = config.ball.v.add(f);
             }
         }
+    }
 
-        let deltaX = (config.ball.position.x - config.camera.position.x) / config.FA;
-        let deltaZ = (config.ball.position.z - config.camera.position.z) / config.FA;
+    let deltaX = (config.ball.position.x - config.camera.position.x) / config.FA;
+    let deltaZ = (config.ball.position.z - config.camera.position.z) / config.FA;
 
-        // if(config.ball.v.length() < 0.8) { // 最大速度
-            // 改变小球速度
-            if(keyboard[38]) { // up
-                config.ball.f.x += deltaX;
-                config.ball.f.z += deltaZ;
-            }
-            if(keyboard[40]) { // down
-                config.ball.f.x -= deltaX;
-                config.ball.f.z -= deltaZ;
-            }
-            if(keyboard[37]) { // left
-                config.ball.f.x += deltaZ;
-                config.ball.f.z -= deltaX;
-            }
-            if(keyboard[39]) { //right
-                config.ball.f.x -= deltaZ;
-                config.ball.f.z += deltaX;
-            }
-        // }
+    // 改变小球速度
+    if(keyboard[38]) { // up
+        config.ball.f.x += deltaX;
+        config.ball.f.z += deltaZ;
+    }
+    if(keyboard[40]) { // down
+        config.ball.f.x -= deltaX;
+        config.ball.f.z -= deltaZ;
+    }
+    if(keyboard[37]) { // left
+        config.ball.f.x += deltaZ;
+        config.ball.f.z -= deltaX;
+    }
+    if(keyboard[39]) { //right
+        config.ball.f.x -= deltaZ;
+        config.ball.f.z += deltaX;
     }
 
     // 重力
