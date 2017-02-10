@@ -13,6 +13,7 @@ const config = {
     camera: null,
     ball: null,
     id: null, // animation id
+    isSingle: true,
 };
 
 export default config;
