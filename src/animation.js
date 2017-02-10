@@ -39,19 +39,19 @@ export default function animate() {
     let deltaZ = (config.ball.position.z - config.camera.position.z) / config.FA;
 
     // 改变小球速度
-    if(keyboard[38]) { // up
+    if(keyboard[87]) { // up
         config.ball.f.x += deltaX;
         config.ball.f.z += deltaZ;
     }
-    if(keyboard[40]) { // down
+    if(keyboard[83]) { // down
         config.ball.f.x -= deltaX;
         config.ball.f.z -= deltaZ;
     }
-    if(keyboard[37]) { // left
+    if(keyboard[65]) { // left
         config.ball.f.x += deltaZ;
         config.ball.f.z -= deltaX;
     }
-    if(keyboard[39]) { //right
+    if(keyboard[68]) { //right
         config.ball.f.x -= deltaZ;
         config.ball.f.z += deltaX;
     }
@@ -80,21 +80,27 @@ export default function animate() {
     vDom.textContent = vNum;
 
     if(config.ball.position.y + config.ball.v.y < -30) {
-        reset()
+        reset(config.ball)
     } else {
         config.ball.position.set(config.ball.position.x + config.ball.v.x, config.ball.position.y + config.ball.v.y, config.ball.position.z + config.ball.v.z);
-        config.camera.position.set(config.camera.position.x + config.ball.v.x, config.camera.position.y + config.ball.v.y, config.camera.position.z + config.ball.v.z);
+        if(config.isSingle) {
+            config.camera.position.set(config.camera.position.x + config.ball.v.x, config.camera.position.y + config.ball.v.y, config.camera.position.z + config.ball.v.z);
+        }
     }
 
-    config.camera.lookAt(config.ball.position);
+    if(config.isSingle) {
+        config.camera.lookAt(config.ball.position);
+    }    
     config.renderer.render(config.scene, config.camera);
     config.id = requestAnimationFrame(animate);
 }
 
-function reset() {
-    config.ball.position.set(0, 10, 0);
-    config.ball.v = new THREE.Vector3(0, 0, 0);
-    config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
+function reset(ball) {
+    ball.position.set(0, 10, 0);
+    ball.v = new THREE.Vector3(0, 0, 0);
+    if(config.isSingle) {
+        config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
+    }
 }
 
 resetBtn.addEventListener('click', reset);

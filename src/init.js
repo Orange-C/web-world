@@ -5,7 +5,13 @@ import { createAxis, addV, subtractV } from './utils'
 import animate from './animation';
 import { createNormalBlock } from './obj';
 
-export default function init() {
+let canvasBox = document.querySelector('.canvas-box');
+
+export default function init(initType) {
+    if(config.id) {
+        cancelAnimationFrame(config.id);
+    }
+    initConfig(initType);
     // 初始化config.renderer
     config.renderer = new THREE.WebGLRenderer({
         antialias:true,
@@ -13,17 +19,13 @@ export default function init() {
         preserveDrawingBuffer:true
     });
     config.renderer.setSize(600, 450);
-    document.querySelector('.canvas-box').appendChild(config.renderer.domElement);
+    canvasBox.innerHTML = '';
+    canvasBox.appendChild(config.renderer.domElement);
     config.renderer.setClearColor(0x000000);
 
     // 初始化config.scene
     config.scene = new THREE.Scene();
-
-    // 初始化config.camera
-    config.camera = new THREE.PerspectiveCamera(45, 4/3, 1, 100*config.focalDistance);
-    config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
-    config.camera.lookAt(new THREE.Vector3(0, 0, 0));
-    config.scene.add(config.camera);
+    initCamera();
 
     createAxis();
 
@@ -36,6 +38,31 @@ export default function init() {
     config.renderer.render(config.scene, config.camera);
 
     config.id = requestAnimationFrame(animate);
+}
+
+function initConfig(initType) {
+    config.renderer = null;
+    config.scene = null;
+    config.camera = null;
+    config.ball = null;
+    config.id = null; // animation id
+    if(initType === 'double') {
+        config.isSingle = false;
+        config.FA = 10000 * 3;
+    }
+}
+
+function initCamera() {
+    // 初始化config.camera
+    config.camera = new THREE.PerspectiveCamera(45, 4/3, 1, 100*config.focalDistance);
+    if(config.isSingle) {
+        config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
+    } else {
+        config.camera.position.set(12*config.focalDistance, 9*config.focalDistance, 15*config.focalDistance);
+    }
+
+    config.camera.lookAt(new THREE.Vector3(0, 0, 0));
+    config.scene.add(config.camera);
 }
 
 function initLight() {
