@@ -44,11 +44,14 @@ function initConfig(initType) {
     config.renderer = null;
     config.scene = null;
     config.camera = null;
-    config.ball = null;
+    config.ball = [];
     config.id = null; // animation id
     if(initType === 'double') {
         config.isSingle = false;
         config.FA = 10000 * 3;
+    } else {
+        config.isSingle = true;
+        config.FA = 10000;
     }
 }
 
@@ -96,7 +99,13 @@ function addFunc() {
             delta = -delta;
         }
 
-        let r = subtractV(config.ball.position, this.position);
+        let r;
+        if(config.isSingle) {
+            r = subtractV(config.ball[0].position, this.position);
+        } else {
+            r = subtractV(new THREE.Vector3(0,0,0), this.position);
+        }
+
         r.negate();
         let newR = new THREE.Vector3(r.x * Math.cos(delta) - r.z * Math.sin(delta), r.y, r.z * Math.cos(delta) + r.x * Math.sin(delta)) 
         let newP = addV(this.position, subtractV(newR, r));
@@ -105,22 +114,53 @@ function addFunc() {
 }
 
 function initBall() {
-    config.ball = new THREE.Mesh(new THREE.SphereGeometry(config.R, 32, 32),
+    let ball = new THREE.Mesh(new THREE.SphereGeometry(config.R, 32, 32),
         new THREE.MeshLambertMaterial({
             color: 0x00cccc,
         })
     );
-    config.ball.position.set(0, 10, 0);
-    config.ball.castShadow = true;
-    config.ball.receiveShadow = true;
+    ball.castShadow = true;
+    ball.receiveShadow = true;
 
-    config.ball.newP = new THREE.Vector3(0, 0, 0);
-    config.ball.v = new THREE.Vector3(0, 0, 0);
-    config.ball.f = new THREE.Vector3(0, 0, 0);
-    config.ball.m = 1;
-    config.ball.R = config.R;
+    ball.newP = new THREE.Vector3(0, 0, 0);
+    ball.v = new THREE.Vector3(0, 0, 0);
+    ball.f = new THREE.Vector3(0, 0, 0);
+    ball.m = 1;
+    ball.R = config.R;
 
-    config.scene.add(config.ball);
+    config.ball.push(ball);
+
+    if(config.isSingle) {
+        ball.initPos = [0, 10, 0];
+        ball.position.set(...ball.initPos);
+        ball.keyConf = [32, 87, 83, 65, 68];
+    } else {
+        let ball2 = new THREE.Mesh(new THREE.SphereGeometry(config.R, 32, 32),
+            new THREE.MeshLambertMaterial({
+                color: 0xcc00cc,
+            })
+        );
+        ball2.castShadow = true;
+        ball2.receiveShadow = true;
+        ball.keyConf = [67, 87, 83, 65, 68];
+        ball2.keyConf = [78, 73, 75, 74, 76];
+
+        ball2.newP = new THREE.Vector3(0, 0, 0);
+        ball2.v = new THREE.Vector3(0, 0, 0);
+        ball2.f = new THREE.Vector3(0, 0, 0);
+        ball2.m = 1;
+        ball2.R = config.R;
+
+        ball.initPos = [0, 10, 20];
+        ball2.initPos = [20, 10, 0];
+        ball.position.set(...ball.initPos);
+        ball2.position.set(...ball2.initPos);
+
+        config.ball.push(ball2);
+        config.scene.add(ball2);
+    }
+
+    config.scene.add(ball);
 }
 
 function initPlane() {
