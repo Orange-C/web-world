@@ -3,14 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Web World</title>
+    <style>
+    .single-info,
+    .double-info {
+        display: none;
+    }
+    </style>
 </head>
 <body>
-    <p>⬆️⬇️⬅️➡️ move，Space jump，Z,X rotate the viewport </p>
-    <p>speed: <span class="ball-v">0</span></p>
     <button class="reset-btn">reset</button>
     <button class="single-btn">single</button>
     <button class="double-btn">double</button>
     <div class="canvas-box">loading</div>
+    <div class="single-info">
+        <p>speed: <span class="ball-v">0</span></p>
+        <p>W,A,S,D move, Space jump，Z,X rotate the viewport </p>
+    </div>
+    <div class="double-info">
+        <p>ball 1:W,A,S,D move, C jump  speed: <span class="ball-v">0</span></p>
+        <p>ball 2:I,J,K,L move, N jump  speed: <span class="ball-2-v">0</span></p>
+    </div>
     <script type="text/javascript" src="/src/three.min.js"></script>
     <script type="text/javascript" src="/dist/bundle.js"></script>
 </body>

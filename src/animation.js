@@ -3,7 +3,8 @@ import config from './config';
 import {collisionObjs, collisionDetection} from './collision';
 import { addV, subtractV } from './utils'
 
-let vDom = document.querySelector('.ball-v');
+let vDom = document.querySelectorAll('.ball-v');
+let vDom2 = document.querySelector('.ball-2-v');
 let resetBtn = document.querySelector('.reset-btn');
 
 export default function animate() {
@@ -17,9 +18,11 @@ export default function animate() {
         }
     }
     
-    ballMovement(config.ball[0]);
-    if(!config.isSingle) {
-        ballMovement(config.ball[1]);
+    if(config.isSingle) {
+        ballMovement(config.ball[0], vDom[0]);
+    } else {
+        ballMovement(config.ball[0], vDom[1]);
+        ballMovement(config.ball[1], vDom2);
     }
 
     if(config.isSingle) {
@@ -29,7 +32,7 @@ export default function animate() {
     config.id = requestAnimationFrame(animate);
 }
 
-function ballMovement(ball) {
+function ballMovement(ball, domEl) {
     if(ball.isPlane) {
         ball.isPlane = false;
 
@@ -99,7 +102,7 @@ function ballMovement(ball) {
 
     // 小球运动
     let vNum = ball.v.length().toFixed(2);
-    vDom.textContent = vNum;
+    domEl.textContent = vNum;
 
     if(ball.position.y + ball.v.y < -30) {
         reset(ball)
