@@ -1,3 +1,4 @@
+import '../css/index.less'
 import init from './init'
 
 let singleBtn = document.querySelector('.single-btn');
