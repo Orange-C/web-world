@@ -1,6 +1,5 @@
 import init from './init'
 
-
 let singleBtn = document.querySelector('.single-btn');
 let doubleBtn = document.querySelector('.double-btn');
 

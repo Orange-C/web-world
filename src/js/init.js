@@ -6,6 +6,8 @@ import animate from './animation';
 import { createNormalBlock } from './obj';
 
 let canvasBox = document.querySelector('.canvas-box');
+let WIDTH = 1000;
+let HEIGHT = 600;
 
 export default function init(initType) {
     if(config.id) {
@@ -18,7 +20,7 @@ export default function init(initType) {
         precision:"highp",
         preserveDrawingBuffer:true
     });
-    config.renderer.setSize(600, 450);
+    config.renderer.setSize(WIDTH, HEIGHT);
     canvasBox.innerHTML = '';
     canvasBox.appendChild(config.renderer.domElement);
     config.renderer.setClearColor(0x000000);
@@ -57,7 +59,7 @@ function initConfig(initType) {
 
 function initCamera() {
     // 初始化config.camera
-    config.camera = new THREE.PerspectiveCamera(45, 4/3, 1, 100*config.focalDistance);
+    config.camera = new THREE.PerspectiveCamera(45, WIDTH/HEIGHT, 1, 100*config.focalDistance);
     if(config.isSingle) {
         config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
     } else {
