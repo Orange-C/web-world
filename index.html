@@ -3,25 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Web World</title>
-    <style>
-    .single-info,
-    .double-info {
-        display: none;
-    }
-    </style>
 </head>
 <body>
-    <button class="reset-btn">reset</button>
-    <button class="single-btn">single</button>
-    <button class="double-btn">double</button>
-    <div class="canvas-box">loading</div>
-    <div class="single-info">
-        <p>speed: <span class="ball-v">0</span></p>
-        <p>W,A,S,D move, Space jump，Z,X rotate the viewport </p>
-    </div>
-    <div class="double-info">
-        <p>ball 1:W,A,S,D move, C jump  speed: <span class="ball-v">0</span></p>
-        <p>ball 2:I,J,K,L move, N jump  speed: <span class="ball-2-v">0</span></p>
+    <div class="main-container">
+        <div class="canvas-box">
+            <div class="main-menu">
+                <p class="logo-text">Web</p>
+                <div class="logo-text-box">
+                    <p class="logo-text">W&nbsp;&nbsp;rld</p>
+                    <img class="loading-logo" src="./src/img/loading.gif" alt="git loading">
+                </div>
+                <div class="btn-box">
+                    <div class="single-btn">single</div>
+                    <div class="double-btn">double</div>
+                </div>
+            </div>
+        </div>
+        <div class="reset-btn">reset</div>
+        <div class="single-info">
+            <table>
+                <tr>
+                    <td>W,A,S,D</td>
+                    <td>Move</td>
+                </tr>
+                <tr>
+                    <td>Space</td>
+                    <td>Jump</td>
+                </tr>
+                <tr>
+                    <td>Z,X</td>
+                    <td>Rotate</td>
+                </tr>
+            </table>
+            <p>speed: <span class="ball-v">0</span></p>
+        </div>
+        <div class="double-info">
+            <div class="info-1">
+                <p>Ball 1</p>
+                <table>
+                    <tr>
+                        <td>W,A,S,D</td>
+                        <td>Move</td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>Jump</td>
+                    </tr>
+                </table>
+                <p>speed: <span class="ball-v">0</span></p>
+            </div>
+            <div class="info-2">
+                <p>Ball 2</p>
+                <table>
+                    <tr>
+                        <td>I,J,K,L</td>
+                        <td>Move</td>
+                    </tr>
+                    <tr>
+                        <td>N</td>
+                        <td>Jump</td>
+                    </tr>
+                </table>
+                <p>speed: <span class="ball-2-v">0</span></p>
+            </div>
+        </div>
     </div>
     <script type="text/javascript" src="./src/js/three.min.js"></script>
     <script type="text/javascript" src="./dist/bundle.js"></script>

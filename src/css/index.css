@@ -1,0 +1,98 @@
+html {
+    background-color: #f8f8f8;
+    font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.main-container {
+    position: relative;
+    width: 1000px;
+    height: 600px;
+    margin: 0 auto;
+    background-color: #000;
+}
+
+.main-menu {
+    color: #f8f8f8;
+
+    .logo-text-box {
+        position: relative;
+    }
+    
+    .logo-text {
+        position: relative;
+        text-align: center;
+        font-size: 120px;
+        margin: 0 0 12px;
+        font-weight: 100;
+        z-index: 10;
+    }
+
+    .loading-logo {
+        display: block;
+        position: absolute;
+        top: -22px;
+        left: 320px;
+        width: 320px;
+        z-index: 1;
+    }
+
+    .btn-box {
+        position: relative;
+        padding: 0 300px;
+        z-index: 2;
+        text-align: center;
+        .single-btn,
+        .double-btn {
+            display: inline-block;
+            border: 1px solid #f8f8f8;
+            border-radius: 4px;
+            padding: 4px 10px;
+            cursor: pointer;
+            transition: all 0.15s ease-in;
+
+            &:hover {
+                color: #5555ff;
+                border-color: #5555ff;
+            }
+        }
+        .single-btn {
+            margin-right: 50px;
+        }
+    }
+}
+
+.single-info,
+.double-info {
+    display: none;
+    color: #f8f8f8;
+    padding: 14px 21px;
+
+    table {
+        border-collapse: collapse;
+        border: none;
+        
+        td {
+            padding-right: 10px;
+        }
+    }
+}
+.single-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 14px 21px;
+}
+.double-info {
+    .info-1,
+    .info-2 {
+        position: absolute;
+        top: 0;
+        padding: 14px 21px;
+    }
+    .info-1 {
+        left: 0;
+    }
+    .info-2 {
+        right: 0;
+    }
+}
