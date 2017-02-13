@@ -10,7 +10,7 @@ var config = {
     entry: [
         // 'webpack-dev-server/client?path=http://127.0.0.1:8000/__webpack_hmr',
         // 'webpack-hot-middleware/client?path=http://127.0.0.1:8003/__webpack_hmr',
-        path.resolve(PROJECT_PATH, 'index.js')
+        path.resolve(PROJECT_PATH, 'js/index.js')
     ],
 
     resolve: {

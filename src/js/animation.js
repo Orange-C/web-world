@@ -101,7 +101,7 @@ function ballMovement(ball, domEl) {
     ball.f = new THREE.Vector3(0, 0, 0); 
 
     // 小球运动
-    let vNum = ball.v.length().toFixed(2);
+    let vNum = (ball.v.length() * 100).toFixed(0);
     domEl.textContent = vNum;
 
     if(ball.position.y + ball.v.y < -30) {
