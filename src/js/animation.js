@@ -10,10 +10,10 @@ let resetBtn = document.querySelector('.reset-btn');
 export default function animate() {
     if(config.isSingle) {
         // 摄像机旋转
-        if(keyboard[90]) {
+        if(keyboard[79]) {
             config.camera.rotateY(Math.PI/180);
         }
-        if(keyboard[88]) {
+        if(keyboard[80]) {
             config.camera.rotateY(Math.PI/180, true);        
         }
     }

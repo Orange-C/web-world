@@ -4,12 +4,24 @@ import config from './config';
 export var collisionObjs = [];
 
 export function collisionDetection(target) {
+    PlaneAndBall(target);
+
     let len = collisionObjs.length;
     for(let i = 0; i < len; i++) {
         let obj = collisionObjs[i];
         if(obj.geometry.type === 'BoxGeometry') {
             BoxAndBall(obj, target);
         }
+    }
+}
+
+function PlaneAndBall(ball) {
+    let planeLen = Math.abs(config.plane.geometry.vertices[0].x);
+    let isOut = (Math.abs(ball.newP.x) >= planeLen) || (Math.abs(ball.newP.z) >= planeLen)
+    if(ball.newP.y <= ball.R && !isOut) {
+        ball.isPlane = true;
+        ball.f.y = 0;
+        ball.v.y = 0;
     }
 }
 
@@ -48,39 +60,6 @@ function BoxAndBall(box, ball) {
     if(isCollided) {
         handleCollision(ball, u, transV)
     }
-}
-
-function testReset(ball, box) {
-    let h = box.geometry.vertices[0];
-    let currentV = subtractV(ball.position, box.position);
-    let v = new THREE.Vector3(Math.abs(currentV.x), Math.abs(currentV.y), Math.abs(currentV.z));
-    let currentU = subtractV(v, h);
-    let testCollided = false;
-    let ulen = 0;
-
-    if(currentU.x >= 0 && currentU.y >= 0 && currentU.z >= 0) {
-        testCollided = currentU.length() <= ball.R;
-    } else {
-        if(currentU.x < 0) currentU.x = 0;
-        if(currentU.y < 0) currentU.y = 0;
-        if(currentU.z < 0) currentU.z = 0;
-
-        ulen = currentU.length();
-
-        testCollided = ulen == 0 || ulen <= ball.R;
-    }
-
-    if(testCollided) {
-        // console.log(ulen);
-
-        ball.position.set(0, 10, 0);
-        ball.v = new THREE.Vector3(0, 0, 0);
-        if(config.isSingle) {
-            config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
-        }
-    }
-
-    return testCollided;
 }
 
 function handleCollision(ball, u, transV) {
@@ -144,3 +123,36 @@ function divideFV(ball, u, trans) {
     ball.f.divide(trans);
     ball.v.divide(trans);
 }
+
+// function testReset(ball, box) {
+//     let h = box.geometry.vertices[0];
+//     let currentV = subtractV(ball.position, box.position);
+//     let v = new THREE.Vector3(Math.abs(currentV.x), Math.abs(currentV.y), Math.abs(currentV.z));
+//     let currentU = subtractV(v, h);
+//     let testCollided = false;
+//     let ulen = 0;
+
+//     if(currentU.x >= 0 && currentU.y >= 0 && currentU.z >= 0) {
+//         testCollided = currentU.length() <= ball.R;
+//     } else {
+//         if(currentU.x < 0) currentU.x = 0;
+//         if(currentU.y < 0) currentU.y = 0;
+//         if(currentU.z < 0) currentU.z = 0;
+
+//         ulen = currentU.length();
+
+//         testCollided = ulen == 0 || ulen <= ball.R;
+//     }
+
+//     if(testCollided) {
+//         // console.log(ulen);
+
+//         ball.position.set(0, 10, 0);
+//         ball.v = new THREE.Vector3(0, 0, 0);
+//         if(config.isSingle) {
+//             config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
+//         }
+//     }
+
+//     return testCollided;
+// }
