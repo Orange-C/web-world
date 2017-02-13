@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var precss = require('precss');
 var autoprefixer = require('autoprefixer');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var NODE_MODULES_PATH = path.join(__dirname, 'node_modules');
 var PROJECT_PATH = path.join(__dirname, 'src');
@@ -39,8 +40,8 @@ var config = {
             test: /\.json$/,
             loader: 'json'
         }, {
-            test: /\.css?$/,
-            loaders: ['style', 'css', 'postcss'],
+            test: /\.less$/,
+            loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')
         }, {
             test: /\.(woff|eot|ttf)$/i,
             loader: 'url',
@@ -77,13 +78,14 @@ var config = {
     },
 
     postcss: function () {
-        return [precss, autoprefixer];
+        return [autoprefixer];
     },
 
     plugins: [
+        new ExtractTextPlugin("styles.css"),
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin()
+        new webpack.NoErrorsPlugin(),
     ]
 }
 
