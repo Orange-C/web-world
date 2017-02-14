@@ -13,6 +13,37 @@ export function collisionDetection(target) {
             BoxAndBall(obj, target);
         }
     }
+
+    let oldF = new THREE.Vector3(target.f.x, target.f.y, target.f.z);
+    let a = oldF.divideScalar(target.m);
+    let newV = addV(target.v, a);
+
+    target.newP.x = target.position.x + newV.x;
+    target.newP.y = target.position.y + newV.y;
+    target.newP.z = target.position.z + newV.z;
+}
+
+export function BallCollision(first, second) {
+    let X = (first.newP.x -  second.newP.x)*(first.newP.x -  second.newP.x);
+    let Y = (first.newP.y -  second.newP.y)*(first.newP.y -  second.newP.y);
+    let Z = (first.newP.z -  second.newP.z)*(first.newP.z -  second.newP.z);
+
+    if((X + Y + Z) <= ((first.R + second.R) * (first.R + second.R))) {
+        first.f = new THREE.Vector3(0,0,0);
+        second.f = new THREE.Vector3(0,0,0);
+        let tempV = cloneV(first.v);
+        first.v = second.v;
+        second.v = tempV;
+
+        calcNewP(first);
+        calcNewP(second);
+    }
+}
+
+function calcNewP(ball) {
+    ball.newP.x = ball.position.x + ball.v.x;
+    ball.newP.y = ball.position.y + ball.v.y;
+    ball.newP.z = ball.position.z + ball.v.z;
 }
 
 function PlaneAndBall(ball) {

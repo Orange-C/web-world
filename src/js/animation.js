@@ -1,6 +1,6 @@
 import {keyboard} from './keyboard';
 import config from './config';
-import {collisionObjs, collisionDetection} from './collision';
+import { collisionDetection, BallCollision } from './collision';
 import { addV, subtractV } from './utils'
 
 let vDom = document.querySelectorAll('.ball-v');
@@ -19,8 +19,18 @@ export default function animate() {
     }
     
     if(config.isSingle) {
+        ballVCalc(config.ball[0]);
+        collisionDetection(config.ball[0]);
         ballMovement(config.ball[0], vDom[0]);
     } else {
+        ballVCalc(config.ball[0], vDom[1]);
+        ballVCalc(config.ball[1], vDom2);
+        collisionDetection(config.ball[0]);
+        collisionDetection(config.ball[1]);
+        BallCollision(config.ball[0],config.ball[1]);
+        collisionDetection(config.ball[0]);
+        collisionDetection(config.ball[1]);
+        BallCollision(config.ball[0],config.ball[1]);
         ballMovement(config.ball[0], vDom[1]);
         ballMovement(config.ball[1], vDom2);
     }
@@ -32,7 +42,7 @@ export default function animate() {
     config.id = requestAnimationFrame(animate);
 }
 
-function ballMovement(ball, domEl) {
+function ballVCalc(ball) {
     if(ball.isPlane) {
         ball.isPlane = false;
 
@@ -92,11 +102,11 @@ function ballMovement(ball, domEl) {
     ball.newP.x = ball.position.x + newV.x;
     ball.newP.y = ball.position.y + newV.y;
     ball.newP.z = ball.position.z + newV.z;
+}
 
-    collisionDetection(ball);
-
+function ballMovement(ball, domEl) {
     // 实际加速度
-    a = ball.f.divideScalar(ball.m);
+    let a = ball.f.divideScalar(ball.m);
     ball.v.add(a);
     ball.f = new THREE.Vector3(0, 0, 0); 
 
