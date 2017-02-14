@@ -4,12 +4,55 @@ import config from './config';
 export var collisionObjs = [];
 
 export function collisionDetection(target) {
+    PlaneAndBall(target);
+
     let len = collisionObjs.length;
     for(let i = 0; i < len; i++) {
         let obj = collisionObjs[i];
         if(obj.geometry.type === 'BoxGeometry') {
             BoxAndBall(obj, target);
         }
+    }
+
+    let oldF = new THREE.Vector3(target.f.x, target.f.y, target.f.z);
+    let a = oldF.divideScalar(target.m);
+    let newV = addV(target.v, a);
+
+    target.newP.x = target.position.x + newV.x;
+    target.newP.y = target.position.y + newV.y;
+    target.newP.z = target.position.z + newV.z;
+}
+
+export function BallCollision(first, second) {
+    let X = (first.newP.x -  second.newP.x)*(first.newP.x -  second.newP.x);
+    let Y = (first.newP.y -  second.newP.y)*(first.newP.y -  second.newP.y);
+    let Z = (first.newP.z -  second.newP.z)*(first.newP.z -  second.newP.z);
+
+    if((X + Y + Z) <= ((first.R + second.R) * (first.R + second.R))) {
+        first.f = new THREE.Vector3(0,0,0);
+        second.f = new THREE.Vector3(0,0,0);
+        let tempV = cloneV(first.v);
+        first.v = second.v;
+        second.v = tempV;
+
+        calcNewP(first);
+        calcNewP(second);
+    }
+}
+
+function calcNewP(ball) {
+    ball.newP.x = ball.position.x + ball.v.x;
+    ball.newP.y = ball.position.y + ball.v.y;
+    ball.newP.z = ball.position.z + ball.v.z;
+}
+
+function PlaneAndBall(ball) {
+    let planeLen = Math.abs(config.plane.geometry.vertices[0].x);
+    let isOut = (Math.abs(ball.newP.x) >= planeLen) || (Math.abs(ball.newP.z) >= planeLen)
+    if(ball.newP.y <= ball.R && !isOut) {
+        ball.isPlane = true;
+        ball.f.y = 0;
+        ball.v.y = 0;
     }
 }
 
@@ -49,39 +92,6 @@ function BoxAndBall(box, ball) {
         handleCollision(ball, u, transV)
     }
 }
-
-// function testReset(ball, box) {
-//     let h = box.geometry.vertices[0];
-//     let currentV = subtractV(ball.position, box.position);
-//     let v = new THREE.Vector3(Math.abs(currentV.x), Math.abs(currentV.y), Math.abs(currentV.z));
-//     let currentU = subtractV(v, h);
-//     let testCollided = false;
-//     let ulen = 0;
-
-//     if(currentU.x >= 0 && currentU.y >= 0 && currentU.z >= 0) {
-//         testCollided = currentU.length() <= ball.R;
-//     } else {
-//         if(currentU.x < 0) currentU.x = 0;
-//         if(currentU.y < 0) currentU.y = 0;
-//         if(currentU.z < 0) currentU.z = 0;
-
-//         ulen = currentU.length();
-
-//         testCollided = ulen == 0 || ulen <= ball.R;
-//     }
-
-//     if(testCollided) {
-//         // console.log(ulen);
-
-//         ball.position.set(0, 10, 0);
-//         ball.v = new THREE.Vector3(0, 0, 0);
-//         if(config.isSingle) {
-//             config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
-//         }
-//     }
-
-//     return testCollided;
-// }
 
 function handleCollision(ball, u, transV) {
     // 面碰撞
@@ -144,3 +154,36 @@ function divideFV(ball, u, trans) {
     ball.f.divide(trans);
     ball.v.divide(trans);
 }
+
+// function testReset(ball, box) {
+//     let h = box.geometry.vertices[0];
+//     let currentV = subtractV(ball.position, box.position);
+//     let v = new THREE.Vector3(Math.abs(currentV.x), Math.abs(currentV.y), Math.abs(currentV.z));
+//     let currentU = subtractV(v, h);
+//     let testCollided = false;
+//     let ulen = 0;
+
+//     if(currentU.x >= 0 && currentU.y >= 0 && currentU.z >= 0) {
+//         testCollided = currentU.length() <= ball.R;
+//     } else {
+//         if(currentU.x < 0) currentU.x = 0;
+//         if(currentU.y < 0) currentU.y = 0;
+//         if(currentU.z < 0) currentU.z = 0;
+
+//         ulen = currentU.length();
+
+//         testCollided = ulen == 0 || ulen <= ball.R;
+//     }
+
+//     if(testCollided) {
+//         // console.log(ulen);
+
+//         ball.position.set(0, 10, 0);
+//         ball.v = new THREE.Vector3(0, 0, 0);
+//         if(config.isSingle) {
+//             config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
+//         }
+//     }
+
+//     return testCollided;
+// }

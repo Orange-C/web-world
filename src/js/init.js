@@ -47,6 +47,7 @@ function initConfig(initType) {
     config.scene = null;
     config.camera = null;
     config.ball = [];
+    config.plane = null;
     config.id = null; // animation id
     if(initType === 'double') {
         config.isSingle = false;
@@ -166,14 +167,14 @@ function initBall() {
 }
 
 function initPlane() {
-    var plane = new THREE.Mesh(new THREE.BoxGeometry(16*config.focalDistance, 1, 16*config.focalDistance),
+    var plane = new THREE.Mesh(new THREE.PlaneGeometry(16*config.focalDistance, 16*config.focalDistance),
         new THREE.MeshLambertMaterial({
             color: 0xe8e8e8,
         })
     );
-    plane.position.setY(-0.5);
+    plane.rotateX(-Math.PI/2);
     plane.receiveShadow = true;
-    collisionObjs.push(plane);
+    config.plane = plane;
     config.scene.add(plane);
 
     var obj = createNormalBlock({
