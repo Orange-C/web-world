@@ -73,22 +73,24 @@ function ballVCalc(ball) {
         deltaZ = -config.camera.position.z / config.FA;
     }
 
-    // 改变小球速度
-    if(keyboard[ball.keyConf[1]]) { // up
-        ball.f.x += deltaX;
-        ball.f.z += deltaZ;
-    }
-    if(keyboard[ball.keyConf[2]]) { // down
-        ball.f.x -= deltaX;
-        ball.f.z -= deltaZ;
-    }
-    if(keyboard[ball.keyConf[3]]) { // left
-        ball.f.x += deltaZ;
-        ball.f.z -= deltaX;
-    }
-    if(keyboard[ball.keyConf[4]]) { //right
-        ball.f.x -= deltaZ;
-        ball.f.z += deltaX;
+    if(!ball.isOut) {
+        // 改变小球速度
+        if(keyboard[ball.keyConf[1]]) { // up
+            ball.f.x += deltaX;
+            ball.f.z += deltaZ;
+        }
+        if(keyboard[ball.keyConf[2]]) { // down
+            ball.f.x -= deltaX;
+            ball.f.z -= deltaZ;
+        }
+        if(keyboard[ball.keyConf[3]]) { // left
+            ball.f.x += deltaZ;
+            ball.f.z -= deltaX;
+        }
+        if(keyboard[ball.keyConf[4]]) { //right
+            ball.f.x -= deltaZ;
+            ball.f.z += deltaX;
+        }
     }
 
     // 重力

@@ -54,6 +54,8 @@ function PlaneAndBall(ball) {
         ball.f.y = 0;
         ball.v.y = 0;
     }
+
+    ball.isOut = isOut;
 }
 
 function BoxAndBall(box, ball) {
