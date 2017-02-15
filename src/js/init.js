@@ -1,9 +1,8 @@
 import { createEvents } from './keyboard';
-import { collisionObjs } from './collision';
 import config from './config';
 import { createAxis, addV, subtractV } from './utils'
 import animate from './animation';
-import { createNormalBlock } from './obj';
+import { initMap } from './initMap';
 
 let canvasBox = document.querySelector('.canvas-box');
 let WIDTH = 1000;
@@ -31,9 +30,10 @@ export default function init(initType) {
 
     createAxis();
 
-    initPlane();
-    initBall();
     initLight();
+    initPlane();
+    initMap();
+    initBall();
     addFunc();    
     createEvents();
 
@@ -72,22 +72,29 @@ function initCamera() {
 }
 
 function initLight() {
-    var ambientLight = new THREE.AmbientLight(0x404040);
+    var ambientLight = new THREE.AmbientLight(0x404040, 0.5);
     config.scene.add(ambientLight);
 
     config.renderer.shadowMap.enabled = true;
     config.renderer.shadowMapSoft = true;
     
-    var light = new THREE.PointLight(0xffffff, 1, 1000);
-    light.position.set(-4*config.focalDistance, 5*config.focalDistance, 5*config.focalDistance);
+    // var light = new THREE.PointLight(0xffffff, 1, 0, 2);
+    // light.position.set(-4*config.focalDistance, 5*config.focalDistance, 5*config.focalDistance);
+    // light.castShadow = true;
+
+    var light = new THREE.DirectionalLight( 0xFFFAF4, 1 );
+    light.position.set( -4*config.focalDistance, 5*config.focalDistance, 3*config.focalDistance );
     light.castShadow = true;
 
     light.shadow.camera.near = 1;
     light.shadow.camera.far = 1000;
-    light.shadow.camera.fov = 90;
+    light.shadow.camera.left = -12*config.focalDistance;
+    light.shadow.camera.right = 12*config.focalDistance;
+    light.shadow.camera.bottom = -12*config.focalDistance;
+    light.shadow.camera.top = 12*config.focalDistance;
 
-    light.shadow.mapSize.width = 1024;
-    light.shadow.mapSize.height = 1024;
+    light.shadow.mapSize.width = 3200;
+    light.shadow.mapSize.height = 3200;
     config.scene.add(light);
 
     // var lightHelper = new THREE.config.cameraHelper(light.shadow.config.camera);
@@ -118,8 +125,8 @@ function addFunc() {
 
 function initBall() {
     let ball = new THREE.Mesh(new THREE.SphereGeometry(config.R, 32, 32),
-        new THREE.MeshLambertMaterial({
-            color: 0x00cccc,
+        new THREE.MeshPhongMaterial({
+            color: 0xCD3C3D,
         })
     );
     ball.castShadow = true;
@@ -140,7 +147,7 @@ function initBall() {
     } else {
         let ball2 = new THREE.Mesh(new THREE.SphereGeometry(config.R, 32, 32),
             new THREE.MeshLambertMaterial({
-                color: 0xcc00cc,
+                color: 0x00cccc,
             })
         );
         ball2.castShadow = true;
@@ -176,48 +183,4 @@ function initPlane() {
     plane.receiveShadow = true;
     config.plane = plane;
     config.scene.add(plane);
-
-    var obj = createNormalBlock({
-        len: [8, 2, 8],
-        pos: [-2, 1, 0],
-        color: 0xf8f8f8
-    });
-    collisionObjs.push(obj);
-    config.scene.add(obj);
-
-    var obj2 = createNormalBlock({
-        len: [8, 2, 8],
-        pos: [-8, 3, 0],
-        color: 0xf8f8f8
-    });
-    collisionObjs.push(obj2);
-    config.scene.add(obj2);
-
-    var obj3 = createNormalBlock({
-        len: [8, 2, 8],
-        pos: [-14, 5, 0],
-        color: 0xf8f8f8
-    });
-    collisionObjs.push(obj3);
-    config.scene.add(obj3);
-
-    var wall1 = createNormalBlock({
-        len: [30, 16, 2],
-        pos: [-10, 8, 4.8],
-        color: 0xffffff,
-        transparent: true,
-        shadow: false,
-    });
-    collisionObjs.push(wall1);
-    config.scene.add(wall1);
-
-    var wall2 = createNormalBlock({
-        len: [30, 16, 2],
-        pos: [-10, 8, -4.8],
-        color: 0xffffff,
-        transparent: true,
-        shadow: false,
-    });
-    collisionObjs.push(wall2);
-    config.scene.add(wall2);
 }
