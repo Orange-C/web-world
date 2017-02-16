@@ -73,7 +73,7 @@ function ballVCalc(ball) {
         deltaZ = -config.camera.position.z / config.FA;
     }
 
-    if(!ball.isOut) {
+    // if(!ball.isOut) {
         // 改变小球速度
         if(keyboard[ball.keyConf[1]]) { // up
             ball.f.x += deltaX;
@@ -91,7 +91,7 @@ function ballVCalc(ball) {
             ball.f.x -= deltaZ;
             ball.f.z += deltaX;
         }
-    }
+    // }
 
     // 重力
     ball.f.y += -1/config.FG;

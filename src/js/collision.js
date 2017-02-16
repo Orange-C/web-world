@@ -4,9 +4,13 @@ import config from './config';
 export var collisionObjs = [];
 
 export function collisionDetection(target) {
-    PlaneAndBall(target);
+    let len = config.plane.length;
+    
+    for(let i = 0; i < len; i++) {
+        PlaneAndBall(config.plane[i], target);
+    }
 
-    let len = collisionObjs.length;
+    len = collisionObjs.length;
     for(let i = 0; i < len; i++) {
         let obj = collisionObjs[i];
         if(obj.geometry.type === 'BoxGeometry') {
@@ -46,10 +50,18 @@ function calcNewP(ball) {
     ball.newP.z = ball.position.z + ball.v.z;
 }
 
-function PlaneAndBall(ball) {
-    let planeLen = Math.abs(config.plane.geometry.vertices[0].x);
-    let isOut = (Math.abs(ball.newP.x) >= planeLen) || (Math.abs(ball.newP.z) >= planeLen)
-    if(ball.newP.y <= ball.R && !isOut) {
+function PlaneAndBall(plane, ball) {
+    let deltaX = 0 - plane.position.x;
+    let deltaZ = 0 - plane.position.z;
+
+    let ballX = ball.newP.x + deltaX;
+    let ballZ = ball.newP.z + deltaZ;
+
+    let planeX = Math.abs(plane.geometry.vertices[0].x);
+    let planeZ = Math.abs(plane.geometry.vertices[0].y);
+
+    let isOut = (Math.abs(ballX) >= planeX) || (Math.abs(ballZ) >= planeZ)
+    if(ball.newP.y <= ball.R && ball.newP.y >= 0 && !isOut) {
         ball.isPlane = true;
         ball.f.y = 0;
         ball.v.y = 0;

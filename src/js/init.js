@@ -47,14 +47,14 @@ function initConfig(initType) {
     config.scene = null;
     config.camera = null;
     config.ball = [];
-    config.plane = null;
+    config.plane = [];
     config.id = null; // animation id
     if(initType === 'double') {
         config.isSingle = false;
-        config.FA = 10000 * 3;
+        config.FA = 6000 * 3;
     } else {
         config.isSingle = true;
-        config.FA = 10000;
+        config.FA = 6000;
     }
 }
 
@@ -64,7 +64,7 @@ function initCamera() {
     if(config.isSingle) {
         config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
     } else {
-        config.camera.position.set(12*config.focalDistance, 9*config.focalDistance, 15*config.focalDistance);
+        config.camera.position.set(4*config.focalDistance, 9*config.focalDistance, 17*config.focalDistance);
     }
 
     config.camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -82,7 +82,7 @@ function initLight() {
     // light.position.set(-4*config.focalDistance, 5*config.focalDistance, 5*config.focalDistance);
     // light.castShadow = true;
 
-    var light = new THREE.DirectionalLight( 0xFFFAF4, 1 );
+    var light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
     light.position.set( -4*config.focalDistance, 5*config.focalDistance, 3*config.focalDistance );
     light.castShadow = true;
 
@@ -180,7 +180,8 @@ function initPlane() {
         })
     );
     plane.rotateX(-Math.PI/2);
+    plane.position.setX(30);
     plane.receiveShadow = true;
-    config.plane = plane;
+    config.plane.push(plane);
     config.scene.add(plane);
 }
