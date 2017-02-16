@@ -1,4 +1,4 @@
-// import 'whatwg-fetch';
+import 'whatwg-fetch';
 import '../css/index.less';
 import init from './init';
 
@@ -8,18 +8,26 @@ let resetBtn = document.querySelector('.reset-btn');
 let backBtn = document.querySelector('.back-btn');
 let singleInfo = document.querySelector('.single-info');
 let doubleInfo = document.querySelector('.double-info');
+let analyzeBox = document.querySelector('.analyze-box');
 
-// fetch('http://127.0.0.1:4000/analyze_html',{
-//     method: 'POST',
-//     headers: {
-//         'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({
-//         name: '123',
-//     })
-// }).then((res) => {
-//     console.log(res);
-// })
+fetch('http://127.0.0.1:4000/analyze_html',{
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        name: '123',
+    })
+}).then((res) => {
+    if(res.status === 200) {
+        analyzeBox.style.display = 'block';
+    }
+    return res.json();
+}).then((data) => {
+    console.log(data);
+}).catch((err) => {
+    console.log(err);
+})
 
 backBtn.addEventListener('click', (e) => {
     window.location.reload();

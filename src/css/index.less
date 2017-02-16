@@ -3,12 +3,6 @@ html {
     font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
-@keyframes flash{
-    0% {opacity:0.2}
-    50% {opacity:0.8}
-    100% {opacity:0.2}
-}
-
 .main-container {
     position: relative;
     width: 1000px;
@@ -17,12 +11,19 @@ html {
     background-color: #000;
 }
 
+@keyframes flash{
+    0% {opacity:0.2}
+    50% {opacity:0.8}
+    100% {opacity:0.2}
+}
+
 .game-info {
     text-align: center;
     color: #bbb;
     margin: 0;
-    position: relative;
-    top: 112px;
+    position: absolute;
+    bottom: 12px;
+    left: 398px;
     animation: flash 5s infinite;
 }
 
@@ -100,6 +101,46 @@ html {
 }
 .back-btn {
     left: 10px;
+}
+
+.analyze-box {
+    text-align: center;
+    display: none;
+    position: relative;
+    top: 50px;
+
+    .analyze-url {
+        height: 28px;
+        line-height: 28px;
+        display: inline-block;
+        background-color: transparent;
+        color: #fff;
+        padding: 0px 6px;
+        border: 1px solid #fff;
+        border-radius: 6px;
+        width: 300px;
+
+        &:focus {
+            outline: none;
+        }
+    }
+    .analyze-btn {
+        position: absolute;
+        display: inline-block;
+        user-select: none;
+        margin-left: 20px; 
+        color: #ddd;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 2px 6px;
+        cursor: pointer;
+        transition: all 0.15s ease-in;
+
+        &:hover {
+            color: #00cccc;
+            border-color: #00cccc;
+        }
+    }
 }
 
 .single-info,
