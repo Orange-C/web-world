@@ -1,7 +1,9 @@
-import { cloneV, addV, subtractV, dotV, logV } from './utils'
+import { cloneV, addV, subtractV, dotV, logV, removeObj } from './utils'
 import config from './config';
 
 export var collisionObjs = [];
+
+var refreshObjs = {};
 
 export function collisionDetection(target) {
     let len = config.plane.length;
@@ -14,7 +16,7 @@ export function collisionDetection(target) {
     for(let i = 0; i < len; i++) {
         let obj = collisionObjs[i];
         if(obj.geometry.type === 'BoxGeometry') {
-            BoxAndBall(obj, target);
+            BoxAndBall(obj, target, i);
         }
     }
 
@@ -70,7 +72,7 @@ function PlaneAndBall(plane, ball) {
     ball.isOut = isOut;
 }
 
-function BoxAndBall(box, ball) {
+function BoxAndBall(box, ball, key) {
     let originV = subtractV(ball.newP, box.position);
     let v = new THREE.Vector3(Math.abs(originV.x), Math.abs(originV.y), Math.abs(originV.z));
     let transV = cloneV(v);
@@ -87,23 +89,38 @@ function BoxAndBall(box, ball) {
     //     return;
     // }
 
-    let isCollided = false;
-    let tempU = new THREE.Vector3(u.x, u.y, u.z);
-
-    if(u.x >= 0 && u.y >= 0 && u.z >= 0) {
-        isCollided = u.length() <= ball.R;
+    // 穿透后消失的物体判定
+    if(box.penetrable) {
+        if(u.x < 0 && u.y < 0 && u.z < 0) {
+            removeObj(box);
+            collisionObjs.splice(key, 1);
+            box.callback(ball);
+            refreshObjs[box.name] = box;
+            setTimeout(function(name) {
+                collisionObjs.push(refreshObjs[name]);
+                config.scene.add(refreshObjs[name]);
+                refreshObjs[name] = null;
+            }.bind(this, box.name), 2000);
+        }
     } else {
-        if(u.x < 0) tempU.x = 0;
-        if(u.y < 0) tempU.y = 0;
-        if(u.z < 0) tempU.z = 0;
+        let isCollided = false;
+        let tempU = new THREE.Vector3(u.x, u.y, u.z);
 
-        let ulen = tempU.length();
+        if(u.x >= 0 && u.y >= 0 && u.z >= 0) {
+            isCollided = u.length() <= ball.R;
+        } else {
+            if(u.x < 0) tempU.x = 0;
+            if(u.y < 0) tempU.y = 0;
+            if(u.z < 0) tempU.z = 0;
 
-        isCollided = ulen == 0 || ulen <= ball.R;
-    }
+            let ulen = tempU.length();
 
-    if(isCollided) {
-        handleCollision(ball, u, transV)
+            isCollided = ulen == 0 || ulen <= ball.R;
+        }
+
+        if(isCollided) {
+            handleCollision(ball, u, transV)
+        }
     }
 }
 

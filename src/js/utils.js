@@ -23,6 +23,19 @@ export function logV(v) {
     return 'x: ' + v.x + ' y: ' + v.y + ' z:' + v.z;
 }
 
+export function removeObj(obj) {
+    var selectedObj = config.scene.getObjectByName(obj.name);
+    config.scene.remove(selectedObj);
+}
+
+export function speedUp(ball) {
+    ball.v.multiplyScalar(2);
+}
+
+export function speedDown(ball) {
+    ball.v.divideScalar(2);
+}
+
 export function createAxis() {
     let len = 100;
     // 生成坐标系
