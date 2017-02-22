@@ -9,25 +9,42 @@ let backBtn = document.querySelector('.back-btn');
 let singleInfo = document.querySelector('.single-info');
 let doubleInfo = document.querySelector('.double-info');
 let analyzeBox = document.querySelector('.analyze-box');
+let analyzeUrl = document.querySelector('.analyze-url');
+let analyzeBtn = document.querySelector('.analyze-btn');
 
-fetch('http://127.0.0.1:4000/analyze_html',{
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        name: '123',
-    })
-}).then((res) => {
+fetch('http://127.0.0.1:4000').then((res) => {
     if(res.status === 200) {
         analyzeBox.style.display = 'block';
+        analyzeBtn.addEventListener('click', (e) => {
+            sendUrl()
+        })
     }
-    return res.json();
+    // return res.json();
 }).then((data) => {
-    console.log(data);
+    // console.log(data);
 }).catch((err) => {
     console.log(err);
 })
+
+function sendUrl() {
+    let msg = analyzeUrl.value;
+    console.log(msg);
+    fetch('http://127.0.0.1:4000/analyze',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            url: msg
+        })
+    }).then((res) => {
+        return res.json();
+    }).then((data) => {
+        console.log(data);
+    }).catch((err) => {
+        console.log(err);
+    })
+}
 
 backBtn.addEventListener('click', (e) => {
     window.location.reload();
