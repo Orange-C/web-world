@@ -41,6 +41,11 @@ function sendUrl() {
         return res.json();
     }).then((data) => {
         console.log(data);
+        resetBtn.style.display = 'block';
+        backBtn.style.display = 'block';
+        singleInfo.style.display = 'block';
+        doubleInfo.style.display = 'none';
+        init('single', data.dom);
     }).catch((err) => {
         console.log(err);
     })

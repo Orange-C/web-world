@@ -8,7 +8,7 @@ let canvasBox = document.querySelector('.canvas-box');
 let WIDTH = 1000;
 let HEIGHT = 600;
 
-export default function init(initType) {
+export default function init(initType, dom) {
     if(config.id) {
         cancelAnimationFrame(config.id);
     }
@@ -31,8 +31,7 @@ export default function init(initType) {
     createAxis();
 
     initLight();
-    initPlane();
-    initMap();
+    initMap(dom);
     initBall();
     addFunc();    
     createEvents();
@@ -46,6 +45,7 @@ function initConfig(initType) {
     config.renderer = null;
     config.scene = null;
     config.camera = null;
+    config.light = null;
     config.ball = [];
     config.plane = [];
     config.id = null; // animation id
@@ -83,18 +83,19 @@ function initLight() {
     // light.castShadow = true;
 
     var light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
-    light.position.set( -4*config.focalDistance, 5*config.focalDistance, 3*config.focalDistance );
+    light.position.set(-4*config.focalDistance, 5*config.focalDistance, 3*config.focalDistance);
     light.castShadow = true;
 
     light.shadow.camera.near = 1;
     light.shadow.camera.far = 1000;
-    light.shadow.camera.left = -12*config.focalDistance;
-    light.shadow.camera.right = 12*config.focalDistance;
-    light.shadow.camera.bottom = -12*config.focalDistance;
-    light.shadow.camera.top = 12*config.focalDistance;
+    light.shadow.camera.left = -18*config.focalDistance;
+    light.shadow.camera.right = 18*config.focalDistance;
+    light.shadow.camera.bottom = -18*config.focalDistance;
+    light.shadow.camera.top = 18*config.focalDistance;
 
     light.shadow.mapSize.width = 3200;
     light.shadow.mapSize.height = 3200;
+    config.light = light;
     config.scene.add(light);
 
     // var lightHelper = new THREE.config.cameraHelper(light.shadow.config.camera);
@@ -171,17 +172,4 @@ function initBall() {
     }
 
     config.scene.add(ball);
-}
-
-function initPlane() {
-    var plane = new THREE.Mesh(new THREE.PlaneGeometry(16*config.focalDistance, 16*config.focalDistance),
-        new THREE.MeshLambertMaterial({
-            color: 0xe8e8e8,
-        })
-    );
-    plane.rotateX(-Math.PI/2);
-    plane.position.setX(30);
-    plane.receiveShadow = true;
-    config.plane.push(plane);
-    config.scene.add(plane);
 }

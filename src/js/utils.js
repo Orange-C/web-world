@@ -1,5 +1,11 @@
 import config from './config';
 
+let nameCount = 0;
+
+export function initName() {
+    return ++nameCount + ''
+}
+
 export function cloneV(v) {
     return new THREE.Vector3(v.x, v.y, v.z);
 }
@@ -34,6 +40,19 @@ export function speedUp(ball) {
 
 export function speedDown(ball) {
     ball.v.divideScalar(2);
+}
+
+export function jumpHigh(ball) {
+    ball.v.y = 1.35/config.FJ;
+}
+
+export function calcOffset(len, pos) {
+    let offsetX = (pos === 0 || pos === 2) ? -len/2 : len/2 ;
+    let offsetZ = (pos === 1 || pos === 2) ? -len/2 : len/2 ;
+    return {
+        offsetX,
+        offsetZ
+    }
 }
 
 export function createAxis() {

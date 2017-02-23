@@ -100,7 +100,7 @@ function BoxAndBall(box, ball, key) {
                 collisionObjs.push(refreshObjs[name]);
                 config.scene.add(refreshObjs[name]);
                 refreshObjs[name] = null;
-            }.bind(this, box.name), 2000);
+            }.bind(this, box.name), 4000);
         }
     } else {
         let isCollided = false;

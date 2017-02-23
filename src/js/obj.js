@@ -12,7 +12,7 @@ import config from './config';
  */
 export function createNormalBlock(conf) {
     var obj = new THREE.Mesh(new THREE.BoxGeometry(...conf.len),
-        new THREE.MeshLambertMaterial({
+        new THREE.MeshPhongMaterial({
             color: conf.color,
             transparent: conf.transparent || false,
             opacity: conf.opacity || 0.3,
