@@ -1,18 +1,22 @@
-import { cloneV, addV, subtractV, dotV, logV } from './utils'
+import { cloneV, addV, subtractV, dotV, logV, removeObj, decreaseV } from './utils'
 import config from './config';
 
 export var collisionObjs = [];
 
-export function collisionDetection(target) {
-    PlaneAndBall(target);
+var refreshObjs = {};
 
-    let len = collisionObjs.length;
+export function collisionDetection(target) {
+    let len = config.plane.length;
+    
     for(let i = 0; i < len; i++) {
-        let obj = collisionObjs[i];
-        if(obj.geometry.type === 'BoxGeometry') {
-            BoxAndBall(obj, target);
-        }
+        PlaneAndBall(config.plane[i], target);
     }
+
+    collisionObjs.forEach((obj, i) => {
+        if(obj.geometry.type === 'BoxGeometry') {
+            BoxAndBall(obj, target, i);
+        }
+    })
 
     let oldF = new THREE.Vector3(target.f.x, target.f.y, target.f.z);
     let a = oldF.divideScalar(target.m);
@@ -46,19 +50,28 @@ function calcNewP(ball) {
     ball.newP.z = ball.position.z + ball.v.z;
 }
 
-function PlaneAndBall(ball) {
-    let planeLen = Math.abs(config.plane.geometry.vertices[0].x);
-    let isOut = (Math.abs(ball.newP.x) >= planeLen) || (Math.abs(ball.newP.z) >= planeLen)
-    if(ball.newP.y <= ball.R && !isOut) {
-        ball.isPlane = true;
-        ball.f.y = 0;
-        ball.v.y = 0;
-    }
+function PlaneAndBall(plane, ball) {
+    let deltaX = 0 - plane.position.x;
+    let deltaZ = 0 - plane.position.z;
 
-    ball.isOut = isOut;
+    let ballX = ball.newP.x + deltaX;
+    let ballZ = ball.newP.z + deltaZ;
+
+    let planeX = Math.abs(plane.geometry.vertices[0].x);
+    let planeZ = Math.abs(plane.geometry.vertices[0].y);
+
+    let isOut = (Math.abs(ballX) >= planeX) || (Math.abs(ballZ) >= planeZ)
+    if(ball.newP.y <= ball.R && ball.newP.y >= 0 && !isOut) {
+        ball.f.y = 0;
+        if(ball.decrease && ball.v.y) {
+            ball.v.y = decreaseV(ball.v.y)
+        } else {
+            ball.v.y = 0;
+        }
+    }
 }
 
-function BoxAndBall(box, ball) {
+function BoxAndBall(box, ball, key) {
     let originV = subtractV(ball.newP, box.position);
     let v = new THREE.Vector3(Math.abs(originV.x), Math.abs(originV.y), Math.abs(originV.z));
     let transV = cloneV(v);
@@ -75,41 +88,67 @@ function BoxAndBall(box, ball) {
     //     return;
     // }
 
-    let isCollided = false;
-    let tempU = new THREE.Vector3(u.x, u.y, u.z);
-
-    if(u.x >= 0 && u.y >= 0 && u.z >= 0) {
-        isCollided = u.length() <= ball.R;
+    // 穿透后消失的物体判定
+    if(box.penetrable) {
+        if(u.x < 0 && u.y < 0 && u.z < 0) {
+            removeObj(box);
+            collisionObjs.splice(key, 1);
+            box.callback(ball);
+            refreshObjs[box.name] = box;
+            setTimeout(function(name) {
+                collisionObjs.push(refreshObjs[name]);
+                config.scene.add(refreshObjs[name]);
+                refreshObjs[name] = null;
+            }.bind(this, box.name), box.refresh ? box.refresh : 5000);
+        }
     } else {
-        if(u.x < 0) tempU.x = 0;
-        if(u.y < 0) tempU.y = 0;
-        if(u.z < 0) tempU.z = 0;
+        let isCollided = false;
+        let tempU = new THREE.Vector3(u.x, u.y, u.z);
 
-        let ulen = tempU.length();
+        if(u.x >= 0 && u.y >= 0 && u.z >= 0) {
+            isCollided = u.length() <= ball.R;
+        } else {
+            if(u.x < 0) tempU.x = 0;
+            if(u.y < 0) tempU.y = 0;
+            if(u.z < 0) tempU.z = 0;
 
-        isCollided = ulen == 0 || ulen <= ball.R;
-    }
+            let ulen = tempU.length();
 
-    if(isCollided) {
-        handleCollision(ball, u, transV)
+            isCollided = ulen === 0 || ulen <= ball.R;
+        }
+
+        if(isCollided) {
+            handleCollision(ball, u, transV)
+        }
     }
 }
 
 function handleCollision(ball, u, transV) {
     // 面碰撞
     if(u.z <= 0 && u.y <= 0 && u.x >= 0) {
-        ball.v.x = 0;
+        if(ball.decrease && ball.v.x) {
+            ball.v.x = decreaseV(ball.v.x)
+        } else {
+            ball.v.x = 0;
+        }
         ball.f.x = 0;
         return;
     }
     if(u.x <= 0 && u.y <= 0 && u.z >= 0) {
-        ball.v.z = 0;
+        if(ball.decrease && ball.v.z) {
+            ball.v.z = decreaseV(ball.v.z)
+        } else {
+            ball.v.z = 0;
+        }
         ball.f.z = 0;
         return;
     }
     if(u.z <= 0 && u.x <= 0 && u.y >= 0) {
-        ball.isPlane = true;
-        ball.v.y = 0;
+        if(ball.decrease && ball.v.y) {
+            ball.v.y = decreaseV(ball.v.y)
+        } else {
+            ball.v.y = 0;
+        }
         ball.f.y = 0;
         return;
     }
@@ -153,8 +192,8 @@ function divideFV(ball, u, trans) {
     ball.f.sub(cloneV(ball.f).projectOnVector(unitU));
     ball.v.sub(cloneV(ball.v).projectOnVector(unitU));
 
-    ball.f.divide(trans);
-    ball.v.divide(trans);
+    ball.f.multiply(trans);
+    ball.v.multiply(trans);
 }
 
 // function testReset(ball, box) {

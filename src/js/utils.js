@@ -1,5 +1,11 @@
 import config from './config';
 
+let nameCount = 0;
+
+export function initName() {
+    return ++nameCount + ''
+}
+
 export function cloneV(v) {
     return new THREE.Vector3(v.x, v.y, v.z);
 }
@@ -21,6 +27,40 @@ export function dotV(v1, v2) {
 
 export function logV(v) {
     return 'x: ' + v.x + ' y: ' + v.y + ' z:' + v.z;
+}
+
+export function removeObj(obj) {
+    var selectedObj = config.scene.getObjectByName(obj.name);
+    config.scene.remove(selectedObj);
+}
+
+export function speedUp(ball) {
+    ball.v.multiplyScalar(2);
+}
+
+export function speedDown(ball) {
+    ball.v.divideScalar(2);
+}
+
+export function jumpHigh(ball) {
+    ball.v.y = 1.35/config.FJ;
+}
+
+export function calcOffset(len, pos) {
+    let offsetX = (pos === 0 || pos === 2) ? -len/2 : len/2 ;
+    let offsetZ = (pos === 1 || pos === 2) ? -len/2 : len/2 ;
+    return {
+        offsetX,
+        offsetZ
+    }
+}
+
+export function decreaseV(v) {
+    if(Math.abs(v) > 0.05) {
+        return -0.55 * v
+    } else {
+        return 0
+    }
 }
 
 export function createAxis() {

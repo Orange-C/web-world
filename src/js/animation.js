@@ -43,9 +43,7 @@ export default function animate() {
 }
 
 function ballVCalc(ball) {
-    if(ball.isPlane) {
-        ball.isPlane = false;
-
+    if(!ball.v.y) {
         // 地面跳跃
         if(keyboard[ball.keyConf[0]]) {
             ball.f.y += 1/config.FJ;
@@ -73,24 +71,22 @@ function ballVCalc(ball) {
         deltaZ = -config.camera.position.z / config.FA;
     }
 
-    if(!ball.isOut) {
-        // 改变小球速度
-        if(keyboard[ball.keyConf[1]]) { // up
-            ball.f.x += deltaX;
-            ball.f.z += deltaZ;
-        }
-        if(keyboard[ball.keyConf[2]]) { // down
-            ball.f.x -= deltaX;
-            ball.f.z -= deltaZ;
-        }
-        if(keyboard[ball.keyConf[3]]) { // left
-            ball.f.x += deltaZ;
-            ball.f.z -= deltaX;
-        }
-        if(keyboard[ball.keyConf[4]]) { //right
-            ball.f.x -= deltaZ;
-            ball.f.z += deltaX;
-        }
+    // 改变小球速度
+    if(keyboard[ball.keyConf[1]]) { // up
+        ball.f.x += deltaX;
+        ball.f.z += deltaZ;
+    }
+    if(keyboard[ball.keyConf[2]]) { // down
+        ball.f.x -= deltaX;
+        ball.f.z -= deltaZ;
+    }
+    if(keyboard[ball.keyConf[3]]) { // left
+        ball.f.x += deltaZ;
+        ball.f.z -= deltaX;
+    }
+    if(keyboard[ball.keyConf[4]]) { //right
+        ball.f.x -= deltaZ;
+        ball.f.z += deltaX;
     }
 
     // 重力
