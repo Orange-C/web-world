@@ -1,13 +1,10 @@
 # 3D Web World
 
-a little game about adventure in Web
+a little game about adventure in Web pages, better play with [web-world-analyze](https://github.com/Orange-C/web-world-analyze)
 
 ```
 npm install
 npm start
 ```
 
-## Operation
-
-`Z`, `X` rotate camera
-`up`, `left`, `right`, `down` control
+then open localhost:3000 and play~ :)
