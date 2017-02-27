@@ -15,7 +15,7 @@ export function createNormalBlock(conf) {
         new THREE.MeshPhongMaterial({
             color: conf.color,
             transparent: conf.transparent || false,
-            opacity: conf.opacity || 0.3,
+            opacity: conf.opacity || 0.45,
         })
     );
     obj.position.set(...conf.pos);

@@ -28,7 +28,7 @@ export default function init(initType, dom) {
     config.scene = new THREE.Scene();
     initCamera();
 
-    createAxis();
+    // createAxis();
 
     initLight();
     initMap(dom);
@@ -83,18 +83,18 @@ function initLight() {
     // light.castShadow = true;
 
     var light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
-    light.position.set(-4*config.focalDistance, 5*config.focalDistance, 3*config.focalDistance);
+    light.position.set(-8*config.focalDistance, 10*config.focalDistance, 6*config.focalDistance);
     light.castShadow = true;
 
     light.shadow.camera.near = 1;
-    light.shadow.camera.far = 1000;
-    light.shadow.camera.left = -18*config.focalDistance;
-    light.shadow.camera.right = 18*config.focalDistance;
-    light.shadow.camera.bottom = -18*config.focalDistance;
-    light.shadow.camera.top = 18*config.focalDistance;
+    light.shadow.camera.far = 5000;
+    light.shadow.camera.left = -24*config.focalDistance;
+    light.shadow.camera.right = 24*config.focalDistance;
+    light.shadow.camera.bottom = -24*config.focalDistance;
+    light.shadow.camera.top = 24*config.focalDistance;
 
-    light.shadow.mapSize.width = 3200;
-    light.shadow.mapSize.height = 3200;
+    light.shadow.mapSize.width = 3000;
+    light.shadow.mapSize.height = 3000;
     config.light = light;
     config.scene.add(light);
 
@@ -138,11 +138,12 @@ function initBall() {
     ball.f = new THREE.Vector3(0, 0, 0);
     ball.m = 1;
     ball.R = config.R;
+    ball.decrease = true;
 
     config.ball.push(ball);
 
     if(config.isSingle) {
-        ball.initPos = [0, 10, 0];
+        ball.initPos = [0, 18, 0];
         ball.position.set(...ball.initPos);
         ball.keyConf = [32, 87, 83, 65, 68];
     } else {
@@ -161,9 +162,10 @@ function initBall() {
         ball2.f = new THREE.Vector3(0, 0, 0);
         ball2.m = 1;
         ball2.R = config.R;
+        ball2.decrease = true;
 
-        ball.initPos = [0, 10, 20];
-        ball2.initPos = [20, 10, 0];
+        ball.initPos = [0, 18, 20];
+        ball2.initPos = [20, 18, 0];
         ball.position.set(...ball.initPos);
         ball2.position.set(...ball2.initPos);
 

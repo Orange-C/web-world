@@ -55,6 +55,14 @@ export function calcOffset(len, pos) {
     }
 }
 
+export function decreaseV(v) {
+    if(Math.abs(v) > 0.05) {
+        return -0.55 * v
+    } else {
+        return 0
+    }
+}
+
 export function createAxis() {
     let len = 100;
     // 生成坐标系
