@@ -38,9 +38,18 @@ export default function init(initType, dom) {
     createEvents();
 
     // 计时
-    timeBox.textContent = 360;
+    timeBox.textContent = 240;
     config.timeID = setInterval(() => {
-        timeBox.textContent--
+        let num = +timeBox.textContent;
+        num--;
+        if(num == -1) {
+            failMask.style.display = 'block';
+            backBtn.className = 'back-btn back-btn-mask';
+            resetBtn.className = 'reset-btn reset-btn-mask';
+            config.isP = true;
+        } else {
+            timeBox.textContent = num;
+        }
     }, 1000)
 
     config.renderer.render(config.scene, config.camera);

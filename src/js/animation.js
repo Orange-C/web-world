@@ -21,22 +21,24 @@ export default function animate() {
             config.camera.rotateY(Math.PI/180, true);        
         }
     }
-    
-    if(config.isSingle) {
-        ballVCalc(config.ball[0]);
-        collisionDetection(config.ball[0]);
-        ballMovement(config.ball[0], vDom[0]);
-    } else {
-        ballVCalc(config.ball[0], vDom[1]);
-        ballVCalc(config.ball[1], vDom2);
-        collisionDetection(config.ball[0]);
-        collisionDetection(config.ball[1]);
-        BallCollision(config.ball[0],config.ball[1]);
-        collisionDetection(config.ball[0]);
-        collisionDetection(config.ball[1]);
-        BallCollision(config.ball[0],config.ball[1]);
-        ballMovement(config.ball[0], vDom[1]);
-        ballMovement(config.ball[1], vDom2);
+
+    if(!config.isP) {
+        if(config.isSingle) {
+            ballVCalc(config.ball[0]);
+            collisionDetection(config.ball[0]);
+            ballMovement(config.ball[0], vDom[0]);
+        } else {
+            ballVCalc(config.ball[0], vDom[1]);
+            ballVCalc(config.ball[1], vDom2);
+            collisionDetection(config.ball[0]);
+            collisionDetection(config.ball[1]);
+            BallCollision(config.ball[0],config.ball[1]);
+            collisionDetection(config.ball[0]);
+            collisionDetection(config.ball[1]);
+            BallCollision(config.ball[0],config.ball[1]);
+            ballMovement(config.ball[0], vDom[1]);
+            ballMovement(config.ball[1], vDom2);
+        }
     }
 
     if(config.isSingle) {
@@ -128,12 +130,15 @@ function ballMovement(ball, domEl) {
 }
 
 function reset(ball) {
-    ball.position.set(...ball.initPos);
-    ball.v = new THREE.Vector3(0, 0, 0);
-    if(config.isSingle) {
-        config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
-    }
-    timer();
+    failMask.style.display = 'block';
+    backBtn.className = 'back-btn back-btn-mask';
+    resetBtn.className = 'reset-btn reset-btn-mask';
+    // ball.position.set(...ball.initPos);
+    // ball.v = new THREE.Vector3(0, 0, 0);
+    // if(config.isSingle) {
+    //     config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
+    // }
+    // timer();
 }
 
 resetBtn.addEventListener('click', function(config) {
@@ -148,10 +153,15 @@ resetBtn.addEventListener('click', function(config) {
 }.bind(this, config));
 
 function timer() {
+    failMask.style.display = 'none';
+    successMask.style.display = 'none';
+    backBtn.className = 'back-btn';
+    resetBtn.className = 'reset-btn';
+    config.isP = false;
     if(config.timeID) {
         clearInterval(config.timeID);
     }
-    timeBox.textContent = 5;
+    timeBox.textContent = 240;
     config.timeID = setInterval(() => {
         let num = +timeBox.textContent;
         num--;
@@ -159,6 +169,7 @@ function timer() {
             failMask.style.display = 'block';
             backBtn.className = 'back-btn back-btn-mask';
             resetBtn.className = 'reset-btn reset-btn-mask';
+            config.isP = true;
         } else {
             timeBox.textContent = num;
         }
