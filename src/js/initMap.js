@@ -9,13 +9,59 @@ export function initMap(dom) {
     } else {
         var plane = new THREE.Mesh(new THREE.PlaneGeometry(16*config.focalDistance, 16*config.focalDistance),
             new THREE.MeshLambertMaterial({
-                color: 0xe8e8e8,
+                map: config.texture.ground,
+                // color: 0xcccccc
             })
         );
         plane.rotateX(-Math.PI/2);
         plane.receiveShadow = true;
         config.plane.push(plane);
         config.scene.add(plane);
+
+        var obj = createNormalBlock({
+            type: 'moss',
+            len: [5, 5, 5],
+            pos: [0, 2.5, 0],
+            color: 0xf8f8f8
+        });
+        collisionObjs.push(obj);
+        config.scene.add(obj);
+
+        // var obj2 = createNormalBlock({
+        //     len: [8, 2, 8],
+        //     pos: [-8, 3, 0],
+        //     color: 0xf8f8f8
+        // });
+        // collisionObjs.push(obj2);
+        // config.scene.add(obj2);
+
+        // var obj3 = createNormalBlock({
+        //     len: [8, 2, 8],
+        //     pos: [-14, 5, 0],
+        //     color: 0xf8f8f8
+        // });
+        // collisionObjs.push(obj3);
+        // config.scene.add(obj3);
+
+        // var wall1 = createNormalBlock({
+        //     len: [30, 16, 2],
+        //     pos: [-10, 8, 4.8],
+        //     color: 0xffffff,
+        //     transparent: true,
+        //     shadow: false,
+        // });
+        // collisionObjs.push(wall1);
+        // config.scene.add(wall1);
+
+        // var wall2 = createNormalBlock({
+        //     len: [30, 16, 2],
+        //     pos: [-10, 8, -4.8],
+        //     color: 0xffffff,
+        //     transparent: true,
+        //     shadow: false,
+        // });
+        // collisionObjs.push(wall2);
+        // config.scene.add(wall2);
     }
 }
 
@@ -31,6 +77,7 @@ function initBase(arr, len, dis, height, offset) {
             let objTransparent, objShadow;
             let heightOffset = 0;
             let lenOffset = 0;
+            let objType = 'stone';
             
             // offset calc
             if(height < 3) {
@@ -38,7 +85,7 @@ function initBase(arr, len, dis, height, offset) {
                 if(k%4 === 0) {
                     let plane = new THREE.Mesh(new THREE.PlaneGeometry(18*config.focalDistance, 18*config.focalDistance),
                         new THREE.MeshLambertMaterial({
-                            color: 0xe8e8e8,
+                            map: config.texture.ground,
                         })
                     );
                     plane.rotateX(-Math.PI/2);
@@ -57,7 +104,7 @@ function initBase(arr, len, dis, height, offset) {
             let type = Date.now() % 2;
 
             if(v.name === 'a') {
-                objColor = 0xFDBE41; // yellow
+                objType = 'moss';
                 objHeight = 1;
                 objTransparent = true;
                 objShadow = false;
@@ -67,7 +114,8 @@ function initBase(arr, len, dis, height, offset) {
             }
 
             if(v.name === 'input') {
-                objColor = type ? 0x35CC4B : 0xFC5754; // green
+                objType = 'moss';
+                // objColor = type ? 0x35CC4B : 0xFC5754; // green
                 objHeight = 4;
                 objTransparent = true;
                 objShadow = false;
@@ -102,6 +150,7 @@ function initBase(arr, len, dis, height, offset) {
 
             // init obj
             let obj = createNormalBlock({
+                type: objType,
                 len: [objLen + lenOffset, objHeight, objLen + lenOffset],
                 pos: [objOffset.offsetX, height + heightOffset, objOffset.offsetZ],
                 color: objColor,

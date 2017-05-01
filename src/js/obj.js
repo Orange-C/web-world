@@ -10,10 +10,11 @@ import config from './config';
  *  opacity: number,
  * }
  */
+
 export function createNormalBlock(conf) {
     var obj = new THREE.Mesh(new THREE.BoxGeometry(...conf.len),
-        new THREE.MeshPhongMaterial({
-            color: conf.color,
+        new THREE.MeshLambertMaterial({
+            map: config.texture[conf.type],
             transparent: conf.transparent || false,
             opacity: conf.opacity || 0.45,
         })

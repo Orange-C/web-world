@@ -5,7 +5,11 @@ import { addV, subtractV } from './utils'
 
 let vDom = document.querySelectorAll('.ball-v');
 let vDom2 = document.querySelector('.ball-2-v');
+let backBtn = document.querySelector('.back-btn');
 let resetBtn = document.querySelector('.reset-btn');
+let timeBox = document.querySelector('.time');
+let successMask = document.querySelector('.success-mask');
+let failMask = document.querySelector('.fail-mask');
 
 export default function animate() {
     if(config.isSingle) {
@@ -37,7 +41,8 @@ export default function animate() {
 
     if(config.isSingle) {
         config.camera.lookAt(config.ball[0].position);
-    }    
+    }   
+
     config.renderer.render(config.scene, config.camera);
     config.id = requestAnimationFrame(animate);
 }
@@ -128,6 +133,7 @@ function reset(ball) {
     if(config.isSingle) {
         config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
     }
+    timer();
 }
 
 resetBtn.addEventListener('click', function(config) {
@@ -138,4 +144,23 @@ resetBtn.addEventListener('click', function(config) {
     if(config.isSingle) {
         config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
     }
+    timer();
 }.bind(this, config));
+
+function timer() {
+    if(config.timeID) {
+        clearInterval(config.timeID);
+    }
+    timeBox.textContent = 5;
+    config.timeID = setInterval(() => {
+        let num = +timeBox.textContent;
+        num--;
+        if(num == -1) {
+            failMask.style.display = 'block';
+            backBtn.className = 'back-btn back-btn-mask';
+            resetBtn.className = 'reset-btn reset-btn-mask';
+        } else {
+            timeBox.textContent = num;
+        }
+    }, 1000)
+}

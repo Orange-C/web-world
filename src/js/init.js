@@ -5,6 +5,7 @@ import animate from './animation';
 import { initMap } from './initMap';
 
 let canvasBox = document.querySelector('.canvas-box');
+let timeBox = document.querySelector('.time');
 let WIDTH = 1000;
 let HEIGHT = 600;
 
@@ -35,6 +36,12 @@ export default function init(initType, dom) {
     initBall();
     addFunc();    
     createEvents();
+
+    // 计时
+    timeBox.textContent = 360;
+    config.timeID = setInterval(() => {
+        timeBox.textContent--
+    }, 1000)
 
     config.renderer.render(config.scene, config.camera);
 
@@ -72,7 +79,7 @@ function initCamera() {
 }
 
 function initLight() {
-    var ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+    var ambientLight = new THREE.AmbientLight(0xaaaaaa, 0.5);
     config.scene.add(ambientLight);
 
     config.renderer.shadowMap.enabled = true;

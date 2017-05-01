@@ -57,7 +57,7 @@ export function calcOffset(len, pos) {
 
 export function decreaseV(v) {
     if(Math.abs(v) > 0.05) {
-        return -0.55 * v
+        return -0.3 * v
     } else {
         return 0
     }

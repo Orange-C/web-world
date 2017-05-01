@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
 import '../css/index.less';
 import init from './init';
+import texture from './texture';
 
 let singleBtn = document.querySelector('.single-btn');
 let doubleBtn = document.querySelector('.double-btn');
@@ -11,6 +12,7 @@ let doubleInfo = document.querySelector('.double-info');
 let analyzeBox = document.querySelector('.analyze-box');
 let analyzeUrl = document.querySelector('.analyze-url');
 let analyzeBtn = document.querySelector('.analyze-btn');
+let timeBox = document.querySelector('.time-box');
 
 fetch('http://127.0.0.1:4000').then((res) => {
     if(res.status === 200) {
@@ -51,6 +53,8 @@ function sendUrl() {
     })
 }
 
+texture();
+
 backBtn.addEventListener('click', (e) => {
     window.location.reload();
 })
@@ -60,6 +64,7 @@ singleBtn.addEventListener('click', (e) => {
     backBtn.style.display = 'block';
     singleInfo.style.display = 'block';
     doubleInfo.style.display = 'none';
+    timeBox.style.display = 'block';
     init('single');
 });
 
@@ -68,5 +73,6 @@ doubleBtn.addEventListener('click', (e) => {
     backBtn.style.display = 'block';
     singleInfo.style.display = 'none';
     doubleInfo.style.display = 'block';
+    timeBox.style.display = 'block';
     init('double');
 });
