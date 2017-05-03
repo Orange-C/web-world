@@ -1,5 +1,5 @@
 import config from './config';
-import { createNormalBlock } from './obj';
+import { createNormalBlock, createDoor, createBowl, createStairs, createGoal } from './obj';
 import { collisionObjs } from './collision';
 import { speedUp, speedDown, jumpHigh, calcOffset, initName } from './utils';
 
@@ -26,6 +26,22 @@ export function initMap(dom) {
         });
         collisionObjs.push(obj);
         config.scene.add(obj);
+
+        createDoor({
+            pos: [10, 0, 10]
+        });
+
+        createBowl({
+            pos: [-20, 0, -20]
+        })
+
+        createStairs({
+            pos: [-20, 0, 20]
+        })
+
+        createGoal({
+            pos: [20, 1.5, -20]
+        })
 
         // var obj2 = createNormalBlock({
         //     len: [8, 2, 8],
@@ -104,7 +120,7 @@ function initBase(arr, len, dis, height, offset) {
             let type = Date.now() % 2;
 
             if(v.name === 'a') {
-                objType = 'moss';
+                objType = 'gold';
                 objHeight = 1;
                 objTransparent = true;
                 objShadow = false;
@@ -114,8 +130,7 @@ function initBase(arr, len, dis, height, offset) {
             }
 
             if(v.name === 'input') {
-                objType = 'moss';
-                // objColor = type ? 0x35CC4B : 0xFC5754; // green
+                objType = type ? 'blue' : 'red';
                 objHeight = 4;
                 objTransparent = true;
                 objShadow = false;
@@ -180,4 +195,8 @@ function initBase(arr, len, dis, height, offset) {
             }
         }
     })
+}
+
+function initWeb(dom) {
+    
 }

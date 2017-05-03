@@ -5,7 +5,13 @@ import animate from './animation';
 import { initMap } from './initMap';
 
 let canvasBox = document.querySelector('.canvas-box');
-let timeBox = document.querySelector('.time');
+let timeDom = document.querySelector('.time');
+let timeBox = document.querySelector('.time-box');
+let backBtn = document.querySelector('.back-btn');
+let resetBtn = document.querySelector('.reset-btn');
+let successMask = document.querySelector('.success-mask');
+let failMask = document.querySelector('.fail-mask');
+
 let WIDTH = 1000;
 let HEIGHT = 600;
 
@@ -38,9 +44,10 @@ export default function init(initType, dom) {
     createEvents();
 
     // 计时
-    timeBox.textContent = 240;
+    timeDom.textContent = 240;
+    timeBox.style.display = 'block';
     config.timeID = setInterval(() => {
-        let num = +timeBox.textContent;
+        let num = +timeDom.textContent;
         num--;
         if(num == -1) {
             failMask.style.display = 'block';
@@ -48,7 +55,7 @@ export default function init(initType, dom) {
             resetBtn.className = 'reset-btn reset-btn-mask';
             config.isP = true;
         } else {
-            timeBox.textContent = num;
+            timeDom.textContent = num;
         }
     }, 1000)
 
@@ -65,6 +72,8 @@ function initConfig(initType) {
     config.ball = [];
     config.plane = [];
     config.id = null; // animation id
+    config.goalTotal = 0;
+    config.goalGet = 0;
     if(initType === 'double') {
         config.isSingle = false;
         config.FA = 6000 * 3;

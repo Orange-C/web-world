@@ -94,12 +94,14 @@ function BoxAndBall(box, ball, key) {
             removeObj(box);
             collisionObjs.splice(key, 1);
             box.callback(ball);
-            refreshObjs[box.name] = box;
-            setTimeout(function(name) {
-                collisionObjs.push(refreshObjs[name]);
-                config.scene.add(refreshObjs[name]);
-                refreshObjs[name] = null;
-            }.bind(this, box.name), box.refresh ? box.refresh : 5000);
+            if(box.refresh !== -1) {
+                refreshObjs[box.name] = box;
+                setTimeout(function(name) {
+                    collisionObjs.push(refreshObjs[name]);
+                    config.scene.add(refreshObjs[name]);
+                    refreshObjs[name] = null;
+                }.bind(this, box.name), box.refresh ? box.refresh : 5000);
+            }
         }
     } else {
         let isCollided = false;

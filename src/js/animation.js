@@ -7,7 +7,7 @@ let vDom = document.querySelectorAll('.ball-v');
 let vDom2 = document.querySelector('.ball-2-v');
 let backBtn = document.querySelector('.back-btn');
 let resetBtn = document.querySelector('.reset-btn');
-let timeBox = document.querySelector('.time');
+let timeDom = document.querySelector('.time');
 let successMask = document.querySelector('.success-mask');
 let failMask = document.querySelector('.fail-mask');
 
@@ -161,9 +161,9 @@ function timer() {
     if(config.timeID) {
         clearInterval(config.timeID);
     }
-    timeBox.textContent = 240;
+    timeDom.textContent = 240;
     config.timeID = setInterval(() => {
-        let num = +timeBox.textContent;
+        let num = +timeDom.textContent;
         num--;
         if(num == -1) {
             failMask.style.display = 'block';
@@ -171,7 +171,7 @@ function timer() {
             resetBtn.className = 'reset-btn reset-btn-mask';
             config.isP = true;
         } else {
-            timeBox.textContent = num;
+            timeDom.textContent = num;
         }
     }, 1000)
 }
