@@ -44,7 +44,7 @@ export default function init(initType, dom) {
     createEvents();
 
     // 计时
-    timeDom.textContent = 240;
+    timeDom.textContent = config.playTime;
     timeBox.style.display = 'block';
     config.timeID = setInterval(() => {
         let num = +timeDom.textContent;
@@ -108,7 +108,7 @@ function initLight() {
     // light.castShadow = true;
 
     var light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
-    light.position.set(-8*config.focalDistance, 10*config.focalDistance, 6*config.focalDistance);
+    light.position.set(-5*config.focalDistance, 10*config.focalDistance, 6*config.focalDistance);
     light.castShadow = true;
 
     light.shadow.camera.near = 1;

@@ -10,6 +10,7 @@ let resetBtn = document.querySelector('.reset-btn');
 let timeDom = document.querySelector('.time');
 let successMask = document.querySelector('.success-mask');
 let failMask = document.querySelector('.fail-mask');
+let goalGetBox = document.querySelector('.goal-get');
 
 export default function animate() {
     if(config.isSingle) {
@@ -133,6 +134,7 @@ function reset(ball) {
     failMask.style.display = 'block';
     backBtn.className = 'back-btn back-btn-mask';
     resetBtn.className = 'reset-btn reset-btn-mask';
+    config.isP = true;
     // ball.position.set(...ball.initPos);
     // ball.v = new THREE.Vector3(0, 0, 0);
     // if(config.isSingle) {
@@ -149,6 +151,17 @@ resetBtn.addEventListener('click', function(config) {
     if(config.isSingle) {
         config.camera.position.set(4*config.focalDistance, 3*config.focalDistance, 5*config.focalDistance);
     }
+    if(config.isP) {
+        config.goalGet = 0;
+        config.goalTotal = 0;
+        config.initGoal();
+        goalGetBox.textContent = config.goalGet;
+        if(config.timeID) {
+            clearInterval(config.timeID);
+            config.timeID = undefined;
+        }
+        timeDom.textContent = config.playTime;
+    }
     timer();
 }.bind(this, config));
 
@@ -158,20 +171,18 @@ function timer() {
     backBtn.className = 'back-btn';
     resetBtn.className = 'reset-btn';
     config.isP = false;
-    if(config.timeID) {
-        clearInterval(config.timeID);
+    if(!config.timeID) {
+        config.timeID = setInterval(() => {
+            let num = +timeDom.textContent;
+            num--;
+            if(num == -1) {
+                failMask.style.display = 'block';
+                backBtn.className = 'back-btn back-btn-mask';
+                resetBtn.className = 'reset-btn reset-btn-mask';
+                config.isP = true;
+            } else {
+                timeDom.textContent = num;
+            }
+        }, 1000)
     }
-    timeDom.textContent = 240;
-    config.timeID = setInterval(() => {
-        let num = +timeDom.textContent;
-        num--;
-        if(num == -1) {
-            failMask.style.display = 'block';
-            backBtn.className = 'back-btn back-btn-mask';
-            resetBtn.className = 'reset-btn reset-btn-mask';
-            config.isP = true;
-        } else {
-            timeDom.textContent = num;
-        }
-    }, 1000)
 }

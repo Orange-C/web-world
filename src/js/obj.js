@@ -41,30 +41,97 @@ export function createDoor(conf) {
     let xx = conf.pos[0];
     let yy = conf.pos[1];
     let zz = conf.pos[2];
+
+    let doorH = conf.doorH || 10;
+    let doorW = conf.doorW || 10;
+    let doorT = conf.doorT || 2;
     
-    objs[0] = new THREE.Mesh(new THREE.BoxGeometry(2, 10, 2),
+    objs[0] = new THREE.Mesh(new THREE.BoxGeometry(doorT, doorH, doorT),
         new THREE.MeshLambertMaterial({
             map: config.texture.wood,
         })
     );
-    objs[0].position.set(xx + 4, yy + 5, zz);
+    if(conf.zz) {
+        objs[0].position.set(xx + (doorW/2 - doorT/2), yy + doorH/2, zz);
+    } else {
+        objs[0].position.set(xx, yy + doorH/2, zz  + (doorW/2 - doorT/2));
+    }
     
 
-    objs[1] = new THREE.Mesh(new THREE.BoxGeometry(2, 10, 2),
+    objs[1] = new THREE.Mesh(new THREE.BoxGeometry(doorT, doorH, doorT),
         new THREE.MeshLambertMaterial({
             map: config.texture.wood,
         })
     );
-    objs[1].position.set(xx - 4, yy + 5, zz);
+    if(conf.zz) {
+        objs[1].position.set(xx - (doorW/2 - doorT/2), yy + doorH/2, zz);
+    } else {
+        objs[1].position.set(xx, yy + doorH/2, zz  - (doorW/2 - doorT/2));
+    }
+
+    if(conf.zz) {
+        objs[2] = new THREE.Mesh(new THREE.BoxGeometry(doorW, doorT, doorT),
+            new THREE.MeshLambertMaterial({
+                map: config.texture.wood,
+            })
+        );
+    } else {
+        objs[2] = new THREE.Mesh(new THREE.BoxGeometry(doorT, doorT, doorW),
+            new THREE.MeshLambertMaterial({
+                map: config.texture.wood,
+            })
+        );
+    }
+    objs[2].position.set(xx, yy + doorH - doorT/2, zz);
+
+    collisionObjs.push(...objs);
+
+    objs.forEach((v) => {
+        v.castShadow = true;
+        v.receiveShadow = true;
+        config.scene.add(v);
+    })
+}
+
+export function createWindow(conf) {
+    let objs = [];
+    let xx = conf.pos[0];
+    let yy = conf.pos[1];
+    let zz = conf.pos[2];
+
+    let WinL = conf.WinL || 10;
+    let WinT = conf.WinT || 2;
+    
+    let offset = WinL/2 - WinT/2;
+    objs[0] = new THREE.Mesh(new THREE.BoxGeometry(WinT, WinL, WinT),
+        new THREE.MeshLambertMaterial({
+            map: config.texture.wood,
+        })
+    );
+    objs[0].position.set(xx + offset, yy, zz);
     
 
-    objs[2] = new THREE.Mesh(new THREE.BoxGeometry(2, 10, 2),
+    objs[1] = new THREE.Mesh(new THREE.BoxGeometry(WinT, WinL, WinT),
         new THREE.MeshLambertMaterial({
             map: config.texture.wood,
         })
     );
-    objs[2].position.set(xx, yy + 9, zz);
-    objs[2].rotateZ(Math.PI/2);
+    objs[1].position.set(xx - offset, yy, zz);
+    
+
+    objs[2] = new THREE.Mesh(new THREE.BoxGeometry(WinL, WinT, WinT),
+        new THREE.MeshLambertMaterial({
+            map: config.texture.wood,
+        })
+    );
+    objs[2].position.set(xx, yy + offset, zz);
+
+    objs[3] = new THREE.Mesh(new THREE.BoxGeometry(WinL, WinT, WinT),
+        new THREE.MeshLambertMaterial({
+            map: config.texture.wood,
+        })
+    );
+    objs[3].position.set(xx, yy - offset, zz);
 
     collisionObjs.push(...objs);
 
@@ -82,8 +149,8 @@ export function createBowl(conf) {
     let yy = conf.pos[1];
     let zz = conf.pos[2];
 
-    let bowlW = 20;
-    let sideW = 2;
+    let bowlW = conf.bowlW || 20;
+    let sideW = conf.sideW || 2;
     let bottomH = conf.bottomH || 1;
     let sideH = conf.sideH || 3;
     
@@ -141,13 +208,17 @@ export function createStairs(conf) {
     let stairH = conf.stairH || 1;
     let count = conf.count || 5;
 
-    for(let i = 0;i < 5;i++) {
+    for(let i = 0;i < count;i++) {
         objs[i] = new THREE.Mesh(new THREE.BoxGeometry(stairW, stairH, stairW),
             new THREE.MeshLambertMaterial({
                 map: config.texture.stone,
             })
         );
-        objs[i].position.set(xx - i*stairW/2, yy + stairH/2 + i*stairH, zz);
+        if(conf.xx){
+            objs[i].position.set(xx + conf.xx*i*stairW/2, yy + stairH/2 + i*stairH, zz);
+        } else if(conf.zz) {
+            objs[i].position.set(xx, yy + stairH/2 + i*stairH, zz + conf.zz*i*stairW/2);
+        }
     }
 
     collisionObjs.push(...objs);
@@ -171,7 +242,7 @@ export function createGoal(conf) {
     config.goalTotal++;
     goalTotalBox.textContent = config.goalTotal;
 
-    obj.position.set(...conf.pos);
+    obj.position.set(conf.pos[0], conf.pos[1] + 1.5, conf.pos[2]);
     obj.name = initName();
 
     obj.penetrable = true;

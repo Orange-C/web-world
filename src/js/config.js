@@ -9,6 +9,7 @@ const config = {
     FG: 55, //重力系数，负相关
 
     texture: {},
+    playTime: 180,
     // renderer: null,
     // scene: null,
     // camera: null,
