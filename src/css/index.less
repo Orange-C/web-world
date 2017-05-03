@@ -178,3 +178,51 @@ html {
         right: 0;
     }
 }
+
+.time-box {
+    display: none;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    color: #f8f8f8;
+    padding: 14px 0;
+    text-align: center;
+    font-size: 22px;
+}
+
+.success-mask,
+.fail-mask {
+    display: none;
+    width: 1000px;
+    height: 600px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    line-height: 600px;
+    color: #f8f8f8;
+    z-index: 10;
+    text-align: center;
+    font-size: 36px;
+}
+
+.success-mask {
+    background: rgba(0, 128, 0, 0.5);
+}
+
+.fail-mask {
+    background: rgba(128, 0, 0, 0.5);
+}
+
+.back-btn-mask {
+    left: 340px;
+    bottom: 200px;
+    font-size: 25px;
+    z-index: 100;
+}
+
+.reset-btn-mask {
+    right: 340px;
+    bottom: 200px;
+    font-size: 25px;
+    z-index: 100;
+}

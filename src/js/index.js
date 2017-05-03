@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
 import '../css/index.less';
 import init from './init';
+import texture from './texture';
 
 let singleBtn = document.querySelector('.single-btn');
 let doubleBtn = document.querySelector('.double-btn');
@@ -50,6 +51,8 @@ function sendUrl() {
         console.log(err);
     })
 }
+
+texture();
 
 backBtn.addEventListener('click', (e) => {
     window.location.reload();

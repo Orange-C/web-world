@@ -5,6 +5,13 @@ import animate from './animation';
 import { initMap } from './initMap';
 
 let canvasBox = document.querySelector('.canvas-box');
+let timeDom = document.querySelector('.time');
+let timeBox = document.querySelector('.time-box');
+let backBtn = document.querySelector('.back-btn');
+let resetBtn = document.querySelector('.reset-btn');
+let successMask = document.querySelector('.success-mask');
+let failMask = document.querySelector('.fail-mask');
+
 let WIDTH = 1000;
 let HEIGHT = 600;
 
@@ -36,6 +43,22 @@ export default function init(initType, dom) {
     addFunc();    
     createEvents();
 
+    // 计时
+    timeDom.textContent = config.playTime;
+    timeBox.style.display = 'block';
+    config.timeID = setInterval(() => {
+        let num = +timeDom.textContent;
+        num--;
+        if(num == -1) {
+            failMask.style.display = 'block';
+            backBtn.className = 'back-btn back-btn-mask';
+            resetBtn.className = 'reset-btn reset-btn-mask';
+            config.isP = true;
+        } else {
+            timeDom.textContent = num;
+        }
+    }, 1000)
+
     config.renderer.render(config.scene, config.camera);
 
     config.id = requestAnimationFrame(animate);
@@ -49,6 +72,8 @@ function initConfig(initType) {
     config.ball = [];
     config.plane = [];
     config.id = null; // animation id
+    config.goalTotal = 0;
+    config.goalGet = 0;
     if(initType === 'double') {
         config.isSingle = false;
         config.FA = 6000 * 3;
@@ -72,7 +97,7 @@ function initCamera() {
 }
 
 function initLight() {
-    var ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+    var ambientLight = new THREE.AmbientLight(0xaaaaaa, 0.5);
     config.scene.add(ambientLight);
 
     config.renderer.shadowMap.enabled = true;
@@ -83,7 +108,7 @@ function initLight() {
     // light.castShadow = true;
 
     var light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
-    light.position.set(-8*config.focalDistance, 10*config.focalDistance, 6*config.focalDistance);
+    light.position.set(-5*config.focalDistance, 10*config.focalDistance, 6*config.focalDistance);
     light.castShadow = true;
 
     light.shadow.camera.near = 1;
